@@ -83,7 +83,7 @@ def main():
     # if it can't immediately connect to MySQL, so we have to wait for it.
     wait_for_mysql(mysql_config)
 
-    if 'DOCKER_DB_BOOTSTRAP' in os.environ:
+    if os.environ.get('DOCKER_DB_BOOTSTRAP') != '0':
         if not os.path.exists(initializedfile):
             initialize_mysql_schema(mysql_config)
 
