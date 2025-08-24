@@ -73,21 +73,33 @@ IRIS_PLAN_SETTINGS = None
 USERCONTACT_UI_READONLY = None
 LOGIN_REQUIRED = None
 TEAM_MANAGED_MESSAGE = None
-
+SYNOLOGY_APP_ID = None
+SYNOLOGY_REDIRECT_URI = None
+SYNOLOGY_JS_SDK = None
+SYNOLOGY_OAUTH_URL = None
 
 def index(req, resp):
     # attempt SSO login first then default to session based login
     user = None
     if auth.sso_auth_manager:
         user = auth.sso_auth_manager.authenticate(req)
+        
     if not user:
         user = req.env.get('beaker.session', {}).get('user')
+
+    logger.info("here we go")
     if user is None and LOGIN_REQUIRED:
         resp.content_type = 'text/html'
-        resp.body = jinja2_env.get_template('loginsplash.html').render()
+        resp.text = jinja2_env.get_template('loginsplash.html').render(
+            synology_js_url=SYNOLOGY_JS_SDK,
+            oauthserver_url=SYNOLOGY_OAUTH_URL,
+            synology_app_id=SYNOLOGY_APP_ID,
+            redirect_uri=SYNOLOGY_REDIRECT_URI,
+            nonce=req.context['nonce']
+        )
     else:
         resp.content_type = 'text/html'
-        resp.body = jinja2_env.get_template('index.html').render(
+        resp.text = jinja2_env.get_template('index.html').render(
             user=user,
             slack_instance=SLACK_INSTANCE,
             user_setting_note=INDEX_CONTENT_SETTING['user_setting_note'],
@@ -148,11 +160,23 @@ def init(application, config):
     global PUBLIC_CALENDAR_ADDITIONAL_MESSAGE
     global LOGIN_REQUIRED
     global TEAM_MANAGED_MESSAGE
+    global SYNOLOGY_JS_SDK
+    global SYNOLOGY_OAUTH_URL
+    global SYNOLOGY_APP_ID
+    global SYNOLOGY_REDIRECT_URI
+    
     SLACK_INSTANCE = config.get('slack_instance')
     HEADER_COLOR = config.get('header_color', '#3a3a3a')
     IRIS_PLAN_SETTINGS = config.get('iris_plan_integration')
     USERCONTACT_UI_READONLY = config.get('usercontact_ui_readonly', True)
     PUBLIC_CALENDAR_BASE_URL = config.get('public_calendar_base_url')
+    SYNOLOGY = config.get('synology')
+
+    SYNOLOGY_JS_SDK = SYNOLOGY.get('js_sdk_url')
+    SYNOLOGY_OAUTH_URL = SYNOLOGY.get('sso_url')
+    SYNOLOGY_APP_ID = SYNOLOGY.get('app_id')
+    SYNOLOGY_REDIRECT_URI = SYNOLOGY.get('redirect_uri')
+
     PUBLIC_CALENDAR_ADDITIONAL_MESSAGE = config.get('public_calendar_additional_message')
     LOGIN_REQUIRED = config.get('require_auth')
     TEAM_MANAGED_MESSAGE = config.get('team_managed_message')

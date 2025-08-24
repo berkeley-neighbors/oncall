@@ -1,7 +1,8 @@
 server:
   host: 0.0.0.0
   port: 8080
-debug: True
+debug: False
+require_auth: True
 oncall_host: http://localhost:8080
 metrics: dummy
 db:
@@ -23,7 +24,8 @@ session:
   sign_key: '123'
 auth:
   debug: False
-  module: 'oncall.auth.modules.debug'
+  module: 'oncall.auth.modules.synology_sso_auth'
+  import_user: True
 notifier:
   skipsend: True
 healthcheck_path: /tmp/status
@@ -32,8 +34,14 @@ messengers:
     application: oncall
     iris_api_key: magic
 
-# allow_origins_list:
-#   - http://www.example.com
+synology:
+  app_id: 'c4d5d6343ba0b2e21fd48fee09177c49'
+  sso_url: 'https://sso.berkeleyneighbors.org'
+  js_sdk_url: 'https://sso.berkeleyneighbors.org/webman/sso/synoSSO-1.0.0.js'
+  redirect_uri: 'http://127.0.0.1:8080/auth-response'
+
+allow_origins_list:
+  - 'https://sso.berkeleyneighbors.org'
 
 supported_timezones:
   - 'US/Pacific'

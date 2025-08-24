@@ -15,7 +15,6 @@ logger = logging.getLogger('oncall.auth')
 auth_manager = None
 sso_auth_manager = None
 
-
 def debug_only(function):
     def wrapper(*args, **kwargs):
         raise HTTPForbidden('', 'Admin only action')
@@ -239,7 +238,6 @@ def login_required(function):
 
     return wrapper
 
-
 def init(application, config):
     global check_team_auth
     global check_user_auth
@@ -249,12 +247,13 @@ def init(application, config):
     global auth_manager
     global sso_auth_manager
     global authenticate_user
+    
+    if config.get('auth').get('module'):
+        auth = importlib.import_module(config.get('auth').get('module'))
+        if auth.SSO:
+            sso_auth_manager = getattr(auth, 'Authenticator')(config)
 
-    if config.get('sso_module'):
-        sso_auth = importlib.import_module(config['sso_module'])
-        sso_auth_manager = getattr(sso_auth, 'Authenticator')(config)
-
-    if config.get('debug', False):
+    if config.get('auth').get('debug', False):
         def authenticate_user_test_wrapper(req):
             try:
                 _authenticate_user(req)
@@ -270,15 +269,16 @@ def init(application, config):
         check_calendar_auth_by_id = lambda x, y: True
         debug_only = lambda function: function
 
-    if config.get('docs') or config.get('require_auth'):
+    if config.get('auth').get('docs') or config.get('auth').get('require_auth'):
         # Replace login_required decorator with identity function for autodoc generation
         # Also replace if require_auth is True, since AuthMiddleware already handles login for us
         global login_required
         login_required = lambda x: x
     else:
-        auth = importlib.import_module(config['module'])
+        auth = importlib.import_module(config.get('auth').get('module'))
         auth_manager = getattr(auth, 'Authenticator')(config)
+    from . import login, logout, auth_response
 
-    from . import login, logout
     application.add_route('/login', login)
     application.add_route('/logout', logout)
+    application.add_route('/auth-response', auth_response)

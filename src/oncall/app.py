@@ -8,6 +8,8 @@ import os
 import re
 from beaker.middleware import SessionMiddleware
 from falcon_cors import CORS
+import secrets
+import base64
 
 from . import db, constants, iris, auth
 
@@ -21,16 +23,29 @@ security_headers = [
     ('Strict-Transport-Security', 'max-age=31536000; includeSubDomains'),
 ]
 
-
 def json_error_serializer(req, resp, exception):
     resp.body = exception.to_json()
     resp.content_type = 'application/json'
 
 
 class SecurityHeaderMiddleware(object):
+    def __init__(self, config):
+        self.config = config
+        self.allowed_origins = ' '.join(self.config.get('allow_origins_list', []) + [os.environ.get("IRIS_API_HOST", self.config.get('iris_plan_integration', {}).get('api_host', ''))])
+        
     def process_request(self, req, resp):
+        nonce = secrets.token_urlsafe(16)
+        req.context['nonce'] = nonce
+        security_headers.append(
+            ("Content-Security-Policy",
+             # unsafe-eval is required for handlebars without precompiled templates
+             "default-src 'self' 'unsafe-eval' ; "
+             "font-src 'self' data: blob; img-src data: uri https: http:; "
+             "script-src 'unsafe-eval' 'self' %s '%s'; "
+             "style-src 'unsafe-inline' https: http:;" %
+             (self.allowed_origins, f'nonce-{nonce}')))
+        
         resp.set_headers(security_headers)
-
 
 class ReqBodyMiddleware(object):
     '''
@@ -67,7 +82,7 @@ def init_falcon_api(config):
     global application
     cors = CORS(allow_origins_list=config.get('allow_origins_list', []))
     middlewares = [
-        SecurityHeaderMiddleware(),
+        SecurityHeaderMiddleware(config),
         ReqBodyMiddleware(),
         cors.middleware
     ]
@@ -78,7 +93,7 @@ def init_falcon_api(config):
     application.set_error_serializer(json_error_serializer)
     application.req_options.strip_url_path_trailing_slash = True
     from .auth import init as init_auth
-    init_auth(application, config['auth'])
+    init_auth(application, config)
 
     from .ui import init as init_ui
     init_ui(application, config)
@@ -126,13 +141,6 @@ def init(config):
         iris.init(config['iris_plan_integration'])
 
     if not config.get('debug', False):
-        security_headers.append(
-            ("Content-Security-Policy",
-             # unsafe-eval is required for handlebars without precompiled templates
-             "default-src 'self' %s 'unsafe-eval' ; "
-             "font-src 'self' data: blob; img-src data: uri https: http:; "
-             "style-src 'unsafe-inline' https: http:;" %
-             os.environ.get("IRIS_API_HOST", config.get('iris_plan_integration', {}).get('api_host', ''))))
         logging.basicConfig(level=logging.INFO)
         logger.info('%s', security_headers)
     else:
@@ -149,7 +157,8 @@ def init(config):
         'session.validate_key': config['session']['sign_key'],
         'session.secure': not (config.get('debug', False) or config.get('allow_http', False)),
         'session.httponly': True,
-        'session.crypto_type': 'cryptography'
+        'session.crypto_type': 'cryptography',
+        'session.domain': config.get('oncall_host')
     }
     application = SessionMiddleware(application, session_opts)
     application = RawPathPatcher(application)
