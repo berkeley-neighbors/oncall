@@ -1,7 +1,4 @@
-{% extends "base.html" %}
-{% block content %}
-
-{% raw %}
+{% extends "base.html" %} {% block content %} {% raw %}
 
 <!--// **********************
   Browse teams Page
@@ -92,20 +89,36 @@
         <span class="subheading light">{{@key}}</span>
         {{#each this}}
           {{#each this}}
-          <li class="card-inner border-bottom" data-card-name="{{full_name}}">
-            <img class="card-picture" src="{{defaultPhoto photo_url}}" alt="{{full_name}}">
-            <h4><strong>{{full_name}}</strong> <span class="badge pull-right" data-role="{{role}}">{{role}}</span></h4>
-            <div class="light"><a href="mailto:{{user_contacts.email}}">{{user_contacts.email}}</a></div>
-            <span class="light"><a href="tel:{{user_contacts.call}}">{{user_contacts.call}}</a></span>
-            <ul class="border-top card-content">
-              <li class="small light">{{convertUnixTime start}} - {{convertUnixTime end}}</li>
-            </ul>
-          </li>
+            <li class="card-inner border-bottom" data-card-name="{{full_name}}">
+              <img
+                class="card-picture"
+                src="{{defaultPhoto photo_url}}"
+                alt="{{full_name}}"
+              />
+              <h4><strong>{{full_name}}</strong>
+                <span
+                  class="badge pull-right"
+                  data-role="{{role}}"
+                >{{role}}</span></h4>
+              <div class="light"><a
+                  href="mailto:{{user_contacts.email}}"
+                >{{user_contacts.email}}</a></div>
+              <span class="light"><a
+                  href="tel:{{user_contacts.call}}"
+                >{{user_contacts.call}}</a></span>
+              <ul class="border-top card-content">
+                <li class="small light">{{convertUnixTime start}}
+                  -
+                  {{convertUnixTime end}}</li>
+              </ul>
+            </li>
           {{/each}}
         {{/each}}
       {{/ifNotEmpty}}
     {{/each}}
-    <a class="btn btn-blue card-btn" href="/team/{{name}}" data-navigo> View Team Calendar </a>
+    <a class="btn btn-blue card-btn" href="/team/{{name}}" data-navigo>
+      View Team Calendar
+    </a>
   </ul>
 </script>
 
@@ -119,7 +132,11 @@
       <h1>What are you looking for?</h1>
       <div class="search-wrapper">
         <span class="search-input-wrapper">
-          <input type="text" class="form-control search-input typeahead" placeholder="Search for teams or services" />
+          <input
+            type="text"
+            class="form-control search-input typeahead"
+            placeholder="Search for teams or services"
+          />
           <i class="loader loader-small"></i>
         </span>
         <button id="submit-search" class="btn btn-white">Search</button>
@@ -134,46 +151,59 @@
         <h3>Pinned Teams</h3>
         <div class="card-wrap col-3">
           {{#each this.pinned}}
-          <div class="module module-card dashboard-card card-column" data-team="{{this}}">
-            <div class="module-card-heading border-bottom">
-              <h4>
-                <span>
-                  <a href="/team/{{this}}" data-navigo>{{this}}</a>
+            <div
+              class="module module-card dashboard-card card-column"
+              data-team="{{this}}"
+            >
+              <div class="module-card-heading border-bottom">
+                <h4>
+                  <span>
+                    <a href="/team/{{this}}" data-navigo>{{this}}</a>
+                  </span>
+                </h4>
+                <span class="remove-card-column">
+                  <i class="svg-icon grey-icon">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="8"
+                      height="8"
+                      viewBox="0 0 8 8"
+                    >
+                      <path
+                        d="M1.41 0l-1.41 1.41.72.72 1.78 1.81-1.78 1.78-.72.69 1.41 1.44.72-.72 1.81-1.81 1.78 1.81.69.72 1.44-1.44-.72-.69-1.81-1.78 1.81-1.81.72-.72-1.44-1.41-.69.72-1.78 1.78-1.81-1.78-.72-.72z"
+                      />
+                    </svg>
+                  </i>
                 </span>
-              </h4>
-              <span class="remove-card-column">
-                <i class="svg-icon grey-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 8 8">
-                    <path d="M1.41 0l-1.41 1.41.72.72 1.78 1.81-1.78 1.78-.72.69 1.41 1.44.72-.72 1.81-1.81 1.78 1.81.69.72 1.44-1.44-.72-.69-1.81-1.78 1.81-1.81.72-.72-1.44-1.41-.69.72-1.78 1.78-1.81-1.78-.72-.72z" />
-                  </svg>
-                </i>
-              </span>
+              </div>
+              <div class="dashboard-card-inner">
+                <i class="loader"></i>
+              </div>
             </div>
-            <div class="dashboard-card-inner">
-              <i class="loader"></i>
-            </div>
-          </div>
           {{/each}}
         </div>
       </div>
-      {{/if}}
-      {{#if this.recent}}
+    {{/if}}
+    {{#if this.recent}}
       <div class="landing-teams" id="recent-teams">
         <h3>Recently Viewed Teams</h3>
         <div class="card-wrap col-3">
           {{#each this.recent}}
-          <div class="module module-card dashboard-card card-column" data-team="{{this}}">
-            <div class="module-card-heading border-bottom">
-              <h4>
-                <span>
-                  <a href="/team/{{this}}" data-navigo>{{this}}</a>
-                </span>
-              </h4>
+            <div
+              class="module module-card dashboard-card card-column"
+              data-team="{{this}}"
+            >
+              <div class="module-card-heading border-bottom">
+                <h4>
+                  <span>
+                    <a href="/team/{{this}}" data-navigo>{{this}}</a>
+                  </span>
+                </h4>
+              </div>
+              <div class="dashboard-card-inner">
+                <i class="loader"></i>
+              </div>
             </div>
-            <div class="dashboard-card-inner">
-              <i class="loader"></i>
-            </div>
-          </div>
           {{/each}}
         </div>
       </div>
@@ -217,16 +247,22 @@
             </thead>
             {{#each services}}
               <tr>
-                <td class="result"><h4> <a href="/team/{{@key}}" data-navigo>{{@key}} </a> </h4></td>
+                <td class="result"><h4>
+                    <a href="/team/{{@key}}" data-navigo>{{@key}} </a>
+                  </h4></td>
                 <td>
-                {{#each this.list}}
-                  <li data-service-name="{{this}}" title="{{this}}">
-                    <span>{{this}}</span>
-                  </li>
-                {{/each}}
-                {{#isGreaterThan this.total 5}}
-                  <li><a href="/team/{{@key}}/info" data-navigo> View all {{this.total}} services &raquo; </a></li>
-                {{/isGreaterThan}}
+                  {{#each this.list}}
+                    <li data-service-name="{{this}}" title="{{this}}">
+                      <span>{{this}}</span>
+                    </li>
+                  {{/each}}
+                  {{#isGreaterThan this.total 5}}
+                    <li><a href="/team/{{@key}}/info" data-navigo>
+                        View all
+                        {{this.total}}
+                        services &raquo;
+                      </a></li>
+                  {{/isGreaterThan}}
                 </td>
               </tr>
             {{/each}}
@@ -239,24 +275,26 @@
       {{/ifNotEmpty}}
     {{/ifExists}}
 
-
     {{#ifExists users}}
       <h3>Users</h3>
       {{#if users}}
-      <div class="search-module">
-        <table>
-          <thead>
-            <th> Username </th>
-            <th> Full name </th>
-          </thead>
-          {{#each users}}
-            <tr>
-              <td class="result"><h4> <a href="/dashboard/{{this.name}}" data-navigo>{{this.name}} </a> </h4></td>
-              <td><h4> <p data-navigo>{{this.full_name}} </p> </h4></td>
-            </tr>
-          {{/each}}
-        </table>
-      </div>
+        <div class="search-module">
+          <table>
+            <thead>
+              <th> Username </th>
+              <th> Full name </th>
+            </thead>
+            {{#each users}}
+              <tr>
+                <td class="result"><h4>
+                    <a href="/dashboard/{{this.name}}" data-navigo>{{this.name}}
+                    </a>
+                  </h4></td>
+                <td><h4> <p data-navigo>{{this.full_name}} </p> </h4></td>
+              </tr>
+            {{/each}}
+          </table>
+        </div>
       {{else}}
         <ul class="search-module">
           <h4>No users found</h4>
@@ -272,17 +310,38 @@
   <ul class="card-inner-wrapper">
     {{#ifNotEmpty data.current.primary}}
       <span class="subheading light">On Call Now</span>
-      <li class="card-inner border-bottom" data-card-name="{{data.current.primary.0.full_name}}">
-        <img class="card-picture" src="{{defaultPhoto data.current.primary.0.photo_url}}" alt="{{data.current.primary.0.full_name}}">
-        <h4><strong><a class="landing-teams-name" target="_blank" href="mailto:{{data.current.primary.0.user_contacts.email}}">{{data.current.primary.0.full_name}}</a></strong> <span class="badge pull-right" data-role="{{data.current.primary.0.role}}">{{data.current.primary.0.role}}</span></h4>
+      <li
+        class="card-inner border-bottom"
+        data-card-name="{{data.current.primary.0.full_name}}"
+      >
+        <img
+          class="card-picture"
+          src="{{defaultPhoto data.current.primary.0.photo_url}}"
+          alt="{{data.current.primary.0.full_name}}"
+        />
+        <h4><strong><a
+              class="landing-teams-name"
+              target="_blank"
+              href="mailto:{{data.current.primary.0.user_contacts.email}}"
+            >{{data.current.primary.0.full_name}}</a></strong>
+          <span
+            class="badge pull-right"
+            data-role="{{data.current.primary.0.role}}"
+          >{{data.current.primary.0.role}}</span></h4>
 
         {{#if data.current.primary.0.user_contacts.call}}
-          <span class="light"><a href="tel:{{data.current.primary.0.user_contacts.call}}">{{data.current.primary.0.user_contacts.call}}</a></span>
+          <span class="light"><a
+              href="tel:{{data.current.primary.0.user_contacts.call}}"
+            >{{data.current.primary.0.user_contacts.call}}</a></span>
         {{else}}
           <span class="error-text">No phone number found!</span>
         {{/if}}
         <ul class="border-top card-content">
-          <li class="small light">{{convertUnixTime data.current.primary.0.start}} - {{convertUnixTime data.current.primary.0.end}}</li>
+          <li class="small light">{{convertUnixTime
+              data.current.primary.0.start
+            }}
+            -
+            {{convertUnixTime data.current.primary.0.end}}</li>
         </ul>
       </li>
     {{else}}
@@ -650,138 +709,142 @@
   Team.Audit Page
 *********************** //-->
 <script id="team-audit-template" type="text/x-handlebars-template">
-  {{#if error}}
-    {{>error-page this}}
-  {{else}}
-    <div class="subheader-wrapper">
-      {{>team-subheader name=name page="audit"}}
-    </div>
-    <div class="main container-fluid">
-      <h3 class="module-heading"> Audit </h3>
-      <div class="module">
-        <div>
-         <label class="light"> Audit from: </label><input type="text" id="audit-date" class="form-control" placeholder="YYYY/MM/DD">
-                  <button type="button" class="btn btn-primary" id="refresh-audit-btn"> <span class="btn-text">Refresh Data</span> <i class="loader loader-small"></i> </button>
-                </div>
-
-        <table class="audit-table display">
-          <thead>
-            <tr>
-              <th> Timestamp
-                <i class="svg-icon grey-icon sort-icon sort">
-                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="14" viewBox="0 0 8 14">
-                  <path d="M8 8.5q0 0.203-0.148 0.352l-3.5 3.5q-0.148 0.148-0.352 0.148t-0.352-0.148l-3.5-3.5q-0.148-0.148-0.148-0.352t0.148-0.352 0.352-0.148h7q0.203 0 0.352 0.148t0.148 0.352zM8 5.5q0 0.203-0.148 0.352t-0.352 0.148h-7q-0.203 0-0.352-0.148t-0.148-0.352 0.148-0.352l3.5-3.5q0.148-0.148 0.352-0.148t0.352 0.148l3.5 3.5q0.148 0.148 0.148 0.352z"></path>
-                  </svg>
-                </i>
-                <i class="svg-icon grey-icon sort-icon sort-asc">
-                  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="8" height="14" viewBox="0 0 8 14">
-                    <path d="M8 5.5q0 0.203-0.148 0.352t-0.352 0.148h-7q-0.203 0-0.352-0.148t-0.148-0.352 0.148-0.352l3.5-3.5q0.148-0.148 0.352-0.148t0.352 0.148l3.5 3.5q0.148 0.148 0.148 0.352z"></path>
-                  </svg>
-                </i>
-                <i class="svg-icon grey-icon sort-icon sort-desc">
-                  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="8" height="14" viewBox="0 0 8 14">
-                    <path d="M8 8.5q0 0.203-0.148 0.352l-3.5 3.5q-0.148 0.148-0.352 0.148t-0.352-0.148l-3.5-3.5q-0.148-0.148-0.148-0.352t0.148-0.352 0.352-0.148h7q0.203 0 0.352 0.148t0.148 0.352z"></path>
-                  </svg>
-                </i>
-              </th>
-              <th> Owner
-                <i class="svg-icon grey-icon sort-icon sort">
-                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="14" viewBox="0 0 8 14">
-                  <path d="M8 8.5q0 0.203-0.148 0.352l-3.5 3.5q-0.148 0.148-0.352 0.148t-0.352-0.148l-3.5-3.5q-0.148-0.148-0.148-0.352t0.148-0.352 0.352-0.148h7q0.203 0 0.352 0.148t0.148 0.352zM8 5.5q0 0.203-0.148 0.352t-0.352 0.148h-7q-0.203 0-0.352-0.148t-0.148-0.352 0.148-0.352l3.5-3.5q0.148-0.148 0.352-0.148t0.352 0.148l3.5 3.5q0.148 0.148 0.148 0.352z"></path>
-                  </svg>
-                </i>
-                <i class="svg-icon grey-icon sort-icon sort-asc">
-                  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="8" height="14" viewBox="0 0 8 14">
-                    <path d="M8 5.5q0 0.203-0.148 0.352t-0.352 0.148h-7q-0.203 0-0.352-0.148t-0.148-0.352 0.148-0.352l3.5-3.5q0.148-0.148 0.352-0.148t0.352 0.148l3.5 3.5q0.148 0.148 0.148 0.352z"></path>
-                  </svg>
-                </i>
-                <i class="svg-icon grey-icon sort-icon sort-desc">
-                  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="8" height="14" viewBox="0 0 8 14">
-                    <path d="M8 8.5q0 0.203-0.148 0.352l-3.5 3.5q-0.148 0.148-0.352 0.148t-0.352-0.148l-3.5-3.5q-0.148-0.148-0.148-0.352t0.148-0.352 0.352-0.148h7q0.203 0 0.352 0.148t0.148 0.352z"></path>
-                  </svg>
-                </i>
-              </th>
-              <th> Action
-                <i class="svg-icon grey-icon sort-icon sort">
-                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="14" viewBox="0 0 8 14">
-                  <path d="M8 8.5q0 0.203-0.148 0.352l-3.5 3.5q-0.148 0.148-0.352 0.148t-0.352-0.148l-3.5-3.5q-0.148-0.148-0.148-0.352t0.148-0.352 0.352-0.148h7q0.203 0 0.352 0.148t0.148 0.352zM8 5.5q0 0.203-0.148 0.352t-0.352 0.148h-7q-0.203 0-0.352-0.148t-0.148-0.352 0.148-0.352l3.5-3.5q0.148-0.148 0.352-0.148t0.352 0.148l3.5 3.5q0.148 0.148 0.148 0.352z"></path>
-                  </svg>
-                </i>
-                <i class="svg-icon grey-icon sort-icon sort-asc">
-                  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="8" height="14" viewBox="0 0 8 14">
-                    <path d="M8 5.5q0 0.203-0.148 0.352t-0.352 0.148h-7q-0.203 0-0.352-0.148t-0.148-0.352 0.148-0.352l3.5-3.5q0.148-0.148 0.352-0.148t0.352 0.148l3.5 3.5q0.148 0.148 0.148 0.352z"></path>
-                  </svg>
-                </i>
-                <i class="svg-icon grey-icon sort-icon sort-desc">
-                  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="8" height="14" viewBox="0 0 8 14">
-                    <path d="M8 8.5q0 0.203-0.148 0.352l-3.5 3.5q-0.148 0.148-0.352 0.148t-0.352-0.148l-3.5-3.5q-0.148-0.148-0.148-0.352t0.148-0.352 0.352-0.148h7q0.203 0 0.352 0.148t0.148 0.352z"></path>
-                  </svg>
-                </i>
-              </th>
-              <th> Context
-                <i class="svg-icon grey-icon sort-icon sort">
-                <svg xmlns="http://www.w3.org/2000/svg" width="8" height="14" viewBox="0 0 8 14">
-                  <path d="M8 8.5q0 0.203-0.148 0.352l-3.5 3.5q-0.148 0.148-0.352 0.148t-0.352-0.148l-3.5-3.5q-0.148-0.148-0.148-0.352t0.148-0.352 0.352-0.148h7q0.203 0 0.352 0.148t0.148 0.352zM8 5.5q0 0.203-0.148 0.352t-0.352 0.148h-7q-0.203 0-0.352-0.148t-0.148-0.352 0.148-0.352l3.5-3.5q0.148-0.148 0.352-0.148t0.352 0.148l3.5 3.5q0.148 0.148 0.148 0.352z"></path>
-                  </svg>
-                </i>
-                <i class="svg-icon grey-icon sort-icon sort-asc">
-                  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="8" height="14" viewBox="0 0 8 14">
-                    <path d="M8 5.5q0 0.203-0.148 0.352t-0.352 0.148h-7q-0.203 0-0.352-0.148t-0.148-0.352 0.148-0.352l3.5-3.5q0.148-0.148 0.352-0.148t0.352 0.148l3.5 3.5q0.148 0.148 0.148 0.352z"></path>
-                  </svg>
-                </i>
-                <i class="svg-icon grey-icon sort-icon sort-desc">
-                  <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="8" height="14" viewBox="0 0 8 14">
-                    <path d="M8 8.5q0 0.203-0.148 0.352l-3.5 3.5q-0.148 0.148-0.352 0.148t-0.352-0.148l-3.5-3.5q-0.148-0.148-0.148-0.352t0.148-0.352 0.352-0.148h7q0.203 0 0.352 0.148t0.148 0.352z"></path>
-                  </svg>
-                </i>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-          {{#each this.audits}}
-            <tr>
-              <td> {{this.timestamp}} </td>
-              <td> {{this.owner}} </td>
-              <td> {{this.action}} </td>
-              <td class="audit-context">{{this.context}}</td>
-            </tr>
-          {{/each}}
-          </tbody>
-        </table>
+    {{#if error}}
+      {{>error-page this}}
+    {{else}}
+      <div class="subheader-wrapper">
+        {{>team-subheader name=name page="audit"}}
       </div>
-    </div>
-{{/if}}
+      <div class="main container-fluid">
+        <h3 class="module-heading"> Audit </h3>
+        <div class="module">
+          <div>
+           <label class="light"> Audit from: </label><input type="text" id="audit-date" class="form-control" placeholder="YYYY/MM/DD">
+                    <button type="button" class="btn btn-primary" id="refresh-audit-btn"> <span class="btn-text">Refresh Data</span> <i class="loader loader-small"></i> </button>
+                  </div>
+
+          <table class="audit-table display">
+            <thead>
+              <tr>
+                <th> Timestamp
+                  <i class="svg-icon grey-icon sort-icon sort">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="8" height="14" viewBox="0 0 8 14">
+                    <path d="M8 8.5q0 0.203-0.148 0.352l-3.5 3.5q-0.148 0.148-0.352 0.148t-0.352-0.148l-3.5-3.5q-0.148-0.148-0.148-0.352t0.148-0.352 0.352-0.148h7q0.203 0 0.352 0.148t0.148 0.352zM8 5.5q0 0.203-0.148 0.352t-0.352 0.148h-7q-0.203 0-0.352-0.148t-0.148-0.352 0.148-0.352l3.5-3.5q0.148-0.148 0.352-0.148t0.352 0.148l3.5 3.5q0.148 0.148 0.148 0.352z"></path>
+                    </svg>
+                  </i>
+                  <i class="svg-icon grey-icon sort-icon sort-asc">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="8" height="14" viewBox="0 0 8 14">
+                      <path d="M8 5.5q0 0.203-0.148 0.352t-0.352 0.148h-7q-0.203 0-0.352-0.148t-0.148-0.352 0.148-0.352l3.5-3.5q0.148-0.148 0.352-0.148t0.352 0.148l3.5 3.5q0.148 0.148 0.148 0.352z"></path>
+                    </svg>
+                  </i>
+                  <i class="svg-icon grey-icon sort-icon sort-desc">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="8" height="14" viewBox="0 0 8 14">
+                      <path d="M8 8.5q0 0.203-0.148 0.352l-3.5 3.5q-0.148 0.148-0.352 0.148t-0.352-0.148l-3.5-3.5q-0.148-0.148-0.148-0.352t0.148-0.352 0.352-0.148h7q0.203 0 0.352 0.148t0.148 0.352z"></path>
+                    </svg>
+                  </i>
+                </th>
+                <th> Owner
+                  <i class="svg-icon grey-icon sort-icon sort">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="8" height="14" viewBox="0 0 8 14">
+                    <path d="M8 8.5q0 0.203-0.148 0.352l-3.5 3.5q-0.148 0.148-0.352 0.148t-0.352-0.148l-3.5-3.5q-0.148-0.148-0.148-0.352t0.148-0.352 0.352-0.148h7q0.203 0 0.352 0.148t0.148 0.352zM8 5.5q0 0.203-0.148 0.352t-0.352 0.148h-7q-0.203 0-0.352-0.148t-0.148-0.352 0.148-0.352l3.5-3.5q0.148-0.148 0.352-0.148t0.352 0.148l3.5 3.5q0.148 0.148 0.148 0.352z"></path>
+                    </svg>
+                  </i>
+                  <i class="svg-icon grey-icon sort-icon sort-asc">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="8" height="14" viewBox="0 0 8 14">
+                      <path d="M8 5.5q0 0.203-0.148 0.352t-0.352 0.148h-7q-0.203 0-0.352-0.148t-0.148-0.352 0.148-0.352l3.5-3.5q0.148-0.148 0.352-0.148t0.352 0.148l3.5 3.5q0.148 0.148 0.148 0.352z"></path>
+                    </svg>
+                  </i>
+                  <i class="svg-icon grey-icon sort-icon sort-desc">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="8" height="14" viewBox="0 0 8 14">
+                      <path d="M8 8.5q0 0.203-0.148 0.352l-3.5 3.5q-0.148 0.148-0.352 0.148t-0.352-0.148l-3.5-3.5q-0.148-0.148-0.148-0.352t0.148-0.352 0.352-0.148h7q0.203 0 0.352 0.148t0.148 0.352z"></path>
+                    </svg>
+                  </i>
+                </th>
+                <th> Action
+                  <i class="svg-icon grey-icon sort-icon sort">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="8" height="14" viewBox="0 0 8 14">
+                    <path d="M8 8.5q0 0.203-0.148 0.352l-3.5 3.5q-0.148 0.148-0.352 0.148t-0.352-0.148l-3.5-3.5q-0.148-0.148-0.148-0.352t0.148-0.352 0.352-0.148h7q0.203 0 0.352 0.148t0.148 0.352zM8 5.5q0 0.203-0.148 0.352t-0.352 0.148h-7q-0.203 0-0.352-0.148t-0.148-0.352 0.148-0.352l3.5-3.5q0.148-0.148 0.352-0.148t0.352 0.148l3.5 3.5q0.148 0.148 0.148 0.352z"></path>
+                    </svg>
+                  </i>
+                  <i class="svg-icon grey-icon sort-icon sort-asc">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="8" height="14" viewBox="0 0 8 14">
+                      <path d="M8 5.5q0 0.203-0.148 0.352t-0.352 0.148h-7q-0.203 0-0.352-0.148t-0.148-0.352 0.148-0.352l3.5-3.5q0.148-0.148 0.352-0.148t0.352 0.148l3.5 3.5q0.148 0.148 0.148 0.352z"></path>
+                    </svg>
+                  </i>
+                  <i class="svg-icon grey-icon sort-icon sort-desc">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="8" height="14" viewBox="0 0 8 14">
+                      <path d="M8 8.5q0 0.203-0.148 0.352l-3.5 3.5q-0.148 0.148-0.352 0.148t-0.352-0.148l-3.5-3.5q-0.148-0.148-0.148-0.352t0.148-0.352 0.352-0.148h7q0.203 0 0.352 0.148t0.148 0.352z"></path>
+                    </svg>
+                  </i>
+                </th>
+                <th> Context
+                  <i class="svg-icon grey-icon sort-icon sort">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="8" height="14" viewBox="0 0 8 14">
+                    <path d="M8 8.5q0 0.203-0.148 0.352l-3.5 3.5q-0.148 0.148-0.352 0.148t-0.352-0.148l-3.5-3.5q-0.148-0.148-0.148-0.352t0.148-0.352 0.352-0.148h7q0.203 0 0.352 0.148t0.148 0.352zM8 5.5q0 0.203-0.148 0.352t-0.352 0.148h-7q-0.203 0-0.352-0.148t-0.148-0.352 0.148-0.352l3.5-3.5q0.148-0.148 0.352-0.148t0.352 0.148l3.5 3.5q0.148 0.148 0.148 0.352z"></path>
+                    </svg>
+                  </i>
+                  <i class="svg-icon grey-icon sort-icon sort-asc">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="8" height="14" viewBox="0 0 8 14">
+                      <path d="M8 5.5q0 0.203-0.148 0.352t-0.352 0.148h-7q-0.203 0-0.352-0.148t-0.148-0.352 0.148-0.352l3.5-3.5q0.148-0.148 0.352-0.148t0.352 0.148l3.5 3.5q0.148 0.148 0.148 0.352z"></path>
+                    </svg>
+                  </i>
+                  <i class="svg-icon grey-icon sort-icon sort-desc">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="8" height="14" viewBox="0 0 8 14">
+                      <path d="M8 8.5q0 0.203-0.148 0.352l-3.5 3.5q-0.148 0.148-0.352 0.148t-0.352-0.148l-3.5-3.5q-0.148-0.148-0.148-0.352t0.148-0.352 0.352-0.148h7q0.203 0 0.352 0.148t0.148 0.352z"></path>
+                    </svg>
+                  </i>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+            {{#each this.audits}}
+              <tr>
+                <td> {{this.timestamp}} </td>
+                <td> {{this.owner}} </td>
+                <td> {{this.action}} </td>
+                <td class="audit-context">{{this.context}}</td>
+              </tr>
+            {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </div>
+  {{/if}}
 </script>
 
 <!--// **********************
   Team.subscriptions Page
 *********************** //-->
 <script id="team-subscriptions-template" type="text/x-handlebars-template">
-  {{#if error}}
-    {{>error-page this}}
-  {{else}}
-    <div class="subheader-wrapper">
-      {{>team-subheader name=name page="subscriptions"}}
-    </div>
-    <div class="main container-fluid">
-      <h3 class="module-heading"> Subscriptions <button id="add-subscription" class="btn btn-primary pull-right">+ New Subscription</button></h3>
-      <div class="add-subscription-container">
-        <!--// create form renders here -->
+    {{#if error}}
+      {{>error-page this}}
+    {{else}}
+      <div class="subheader-wrapper">
+        {{>team-subheader name=name page="subscriptions"}}
       </div>
-      <div class="module module-subscriptions-container">
-        <h4 class="module-heading border-bottom"> You have <span class="subscription-count"> 0 </span> subscriptions </h4>
-        <div class="module-subscriptions-wrapper clearfix" data-type="subscription">
-          {{#each this.subscriptions}}
-            {{>module-subscription viewType="schedule-item"}}
-          {{/each}}
+      <div class="main container-fluid">
+        <h3 class="module-heading"> Subscriptions <button id="add-subscription" class="btn btn-primary pull-right">+ New Subscription</button></h3>
+        <div class="add-subscription-container">
+          <!--// create form renders here -->
+        </div>
+        <div class="module module-subscriptions-container">
+          <h4 class="module-heading border-bottom"> You have <span class="subscription-count"> 0 </span> subscriptions </h4>
+          <div class="module-subscriptions-wrapper clearfix" data-type="subscription">
+            {{#each this.subscriptions}}
+              {{>module-subscription viewType="schedule-item"}}
+            {{/each}}
+          </div>
         </div>
       </div>
-    </div>
-{{/if}}
+  {{/if}}
 </script>
 
 <script id="module-subscription-template" type="text/x-handlebars-template">
-  <div class="module module-card module-subscription" data-role="{{role}}" data-team="{{subscription}}">
+  <div
+    class="module module-card module-subscription"
+    data-role="{{role}}"
+    data-team="{{subscription}}"
+  >
     <ul class="subscription-details">
       <li>
         <label class="light label-col">Team:</label>
@@ -793,12 +856,26 @@
       </li>
     </ul>
     <div class="subscription-actions border-top">
-        <span class="delete-{{viewType}}" data-toggle="modal" data-target="#confirm-action-modal" data-modal-action="oncall.team.subscriptions.deleteSubscription" data-modal-title="Delete subscription" data-modal-content="Delete subscription to {{role}} events from {{subscription}}?">
-          <i class="svg-icon svg-icon-trash grey-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 8 8">
-              <path d="M3 0c-.55 0-1 .45-1 1h-1c-.55 0-1 .45-1 1h7c0-.55-.45-1-1-1h-1c0-.55-.45-1-1-1h-1zm-2 3v4.81c0 .11.08.19.19.19h4.63c.11 0 .19-.08.19-.19v-4.81h-1v3.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5v-3.5h-1v3.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5v-3.5h-1z" />
-            </svg>
-          </i>
+      <span
+        class="delete-{{viewType}}"
+        data-toggle="modal"
+        data-target="#confirm-action-modal"
+        data-modal-action="oncall.team.subscriptions.deleteSubscription"
+        data-modal-title="Delete subscription"
+        data-modal-content="Delete subscription to {{role}} events from {{subscription}}?"
+      >
+        <i class="svg-icon svg-icon-trash grey-icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="14px"
+            height="14px"
+            viewBox="0 0 8 8"
+          >
+            <path
+              d="M3 0c-.55 0-1 .45-1 1h-1c-.55 0-1 .45-1 1h7c0-.55-.45-1-1-1h-1c0-.55-.45-1-1-1h-1zm-2 3v4.81c0 .11.08.19.19.19h4.63c.11 0 .19-.08.19-.19v-4.81h-1v3.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5v-3.5h-1v3.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5v-3.5h-1z"
+            />
+          </svg>
+        </i>
         Delete
       </span>
     </div>
@@ -806,7 +883,10 @@
 </script>
 
 <!-- subscription create partial -->
-<script id="module-subscription-create-template" type="text/x-handlebars-template">
+<script
+  id="module-subscription-create-template"
+  type="text/x-handlebars-template"
+>
   <form class="module module-card module-subscription-create" >
     <div class="module-heading module-card-heading border-bottom">
       <h4>
@@ -958,7 +1038,14 @@
 
 <!-- // schedule view partial -->
 <script id="module-schedule-template" type="text/x-handlebars-template">
-  <div class="module module-card module-schedule" data-role="{{role}}" data-roster="{{roster}}" data-advanced="{{advanced_mode}}" data-id="{{id}}" data-model="{{stringify this}}">
+  <div
+    class="module module-card module-schedule"
+    data-role="{{role}}"
+    data-roster="{{roster}}"
+    data-advanced="{{advanced_mode}}"
+    data-id="{{id}}"
+    data-model="{{stringify this}}"
+  >
     <ul class="schedule-details">
       <li>
         <label class="light label-col">ID:</label>
@@ -973,28 +1060,39 @@
         <span class="data-col schedule-role">{{role}}</span>
       </li>
       <li>
-        <label class="light label-col" title="Auto Populate Threshold">Threshold:</label>
-        <span class="data-col schedule-auto-populate-threshold">{{auto_populate_threshold}} Days</span>
+        <label
+          class="light label-col"
+          title="Auto Populate Threshold"
+        >Threshold:</label>
+        <span
+          class="data-col schedule-auto-populate-threshold"
+        >{{auto_populate_threshold}} Days</span>
       </li>
       <li>
         <label class="light label-col">Rotation:</label>
         <ul class="data-col schedule-rotation">
           {{#if is_12_hr}}
             {{#isEqual events.length 7}}
-              {{timeSince events.[0].start 'toString'}} - Weekly (12 hr)
+              {{timeSince events.0.start "toString"}}
+              - Weekly (12 hr)
             {{else}}
-              {{timeSince events.[0].start 'toString'}} - Bi-Weekly (12 hr)
+              {{timeSince events.0.start "toString"}}
+              - Bi-Weekly (12 hr)
             {{/isEqual}}
           {{else}}
             {{#if advanced_mode}}
               {{#each events}}
-                {{timeSince start 'toString'}} - {{timeSince end 'toString'}}<br />
+                {{timeSince start "toString"}}
+                -
+                {{timeSince end "toString"}}<br />
               {{/each}}
             {{else}}
-              {{#isEqual events.[0].duration 604800000}}
-                {{timeSince events.[0].start 'toString'}} - Weekly
+              {{#isEqual events.0.duration 604800000}}
+                {{timeSince events.0.start "toString"}}
+                - Weekly
               {{else}}
-                {{timeSince events.[0].start 'toString'}} - Bi-Weekly
+                {{timeSince events.0.start "toString"}}
+                - Bi-Weekly
               {{/isEqual}}
             {{/if}}
           {{/if}}
@@ -1002,21 +1100,39 @@
       </li>
       <li>
         <label class="light label-col" title="Scheduler">Scheduler:</label>
-        <span class="data-col schedule-algorithm">{{friendlyScheduler scheduler.name}}</span>
+        <span class="data-col schedule-algorithm">{{friendlyScheduler
+            scheduler.name
+          }}</span>
       </li>
     </ul>
     <div class="schedule-actions text-actions">
-      <span class="populate-schedule pull-left" data-toggle="modal" data-target="#populate-schedule-modal">
+      <span
+        class="populate-schedule pull-left"
+        data-toggle="modal"
+        data-target="#populate-schedule-modal"
+      >
         <i class="svg-icon svg-icon-cal grey-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 8 8">
-            <path d="M0 0v2h7v-2h-7zm0 3v4.91c0 .05.04.09.09.09h6.81c.05 0 .09-.04.09-.09v-4.91h-7zm1 1h1v1h-1v-1zm2 0h1v1h-1v-1zm2 0h1v1h-1v-1zm-4 2h1v1h-1v-1zm2 0h1v1h-1v-1z" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="14px"
+            height="14px"
+            viewBox="0 0 8 8"
+          >
+            <path
+              d="M0 0v2h7v-2h-7zm0 3v4.91c0 .05.04.09.09.09h6.81c.05 0 .09-.04.09-.09v-4.91h-7zm1 1h1v1h-1v-1zm2 0h1v1h-1v-1zm2 0h1v1h-1v-1zm-4 2h1v1h-1v-1zm2 0h1v1h-1v-1z"
+            />
           </svg>
         </i>
         Populate
       </span>
       <span class="edit-schedule-item pull-right">
         <i class="svg-icon svg-icon-pencil grey-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="13px" height="13px" viewBox="0 0 8 8">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="13px"
+            height="13px"
+            viewBox="0 0 8 8"
+          >
             <path d="M6 0l-1 1 2 2 1-1-2-2zm-2 2l-4 4v2h2l4-4-2-2z" />
           </svg>
         </i>
@@ -1206,18 +1322,37 @@
 
 <!-- // default-scheduler-template -->
 <script id="default-scheduler-template" type="text/x-handlebars-template">
-  The default scheduler prioritizes users who haven't been on-call for the longest period of time. It respects conflicting events on the team's calendar as well (for example, it will not schedule someone to be on-call if that user has a vacation marked).
+
+  The default scheduler prioritizes users who haven't been on-call for the
+  longest period of time. It respects conflicting events on the team's calendar
+  as well (for example, it will not schedule someone to be on-call if that user
+  has a vacation marked).
 </script>
 
 <!-- // round-robin-scheduler-template -->
 <script id="round-robin-scheduler-template" type="text/x-handlebars-template">
+
   Determines employee order
   <div class="round-robin-scheduler">
-    Set Order <span class="light">(Drag to reorder)</span>
+    Set Order
+    <span class="light">(Drag to reorder)</span>
     <ul class="draggable">
       {{#each this}}
         <li draggable="true" data-user="{{this}}">
-          <svg aria-hidden="true" data-fa-processed="" data-prefix="fas" data-icon="bars" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" class="svg-inline--fa fa-bars fa-w-14"><path fill="currentColor" d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z" class=""></path></svg>
+          <svg
+            aria-hidden="true"
+            data-fa-processed=""
+            data-prefix="fas"
+            data-icon="bars"
+            role="img"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 448 512"
+            class="svg-inline--fa fa-bars fa-w-14"
+          ><path
+              fill="currentColor"
+              d="M16 132h416c8.837 0 16-7.163 16-16V76c0-8.837-7.163-16-16-16H16C7.163 60 0 67.163 0 76v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16zm0 160h416c8.837 0 16-7.163 16-16v-40c0-8.837-7.163-16-16-16H16c-8.837 0-16 7.163-16 16v40c0 8.837 7.163 16 16 16z"
+              class=""
+            ></path></svg>
           {{this}}
         </li>
       {{/each}}
@@ -1226,13 +1361,23 @@
 </script>
 
 <!-- allow-duplicate scheduler template -->
-<script id="allow-duplicate-scheduler-template" type="text/x-handlebars-template">
-  The Default (allow duplicate) scheduler uses the same algorithm as Default, but allows more than one user to be on-call at the same time for a given role. This lets you have duplicate primary events across several schedule templates.
+<script
+  id="allow-duplicate-scheduler-template"
+  type="text/x-handlebars-template"
+>
+
+  The Default (allow duplicate) scheduler uses the same algorithm as Default,
+  but allows more than one user to be on-call at the same time for a given role.
+  This lets you have duplicate primary events across several schedule templates.
 </script>
 
 <!-- allow-duplicate scheduler template -->
 <script id="multi-team-template" type="text/x-handlebars-template">
-  The Default (multi-team aware) scheduler uses the same algorithm as Default, but allows more than one user to be on-call at the same time for a given role. Additionally when scheduling it will check for conflicting events across all teams.
+
+  The Default (multi-team aware) scheduler uses the same algorithm as Default,
+  but allows more than one user to be on-call at the same time for a given role.
+  Additionally when scheduling it will check for conflicting events across all
+  teams.
 </script>
 
 <!--// **********************
@@ -1404,13 +1549,25 @@
 <!--// add card item partial -->
 <script id="add-card-item-template" type="text/x-handlebars-template">
   <div class="add-item-wrapper" data-view="button" data-admin-action="true">
-    <button class="btn btn-blue card-btn add-card-item"> {{buttonText}} </button>
+    <button class="btn btn-blue card-btn add-card-item">
+      {{buttonText}}
+    </button>
     <form class="add-item-form">
       <span class="error-text"></span>
-      <input type="text" name="add-item-name" class="form-control add-item-name typeahead" placeholder="{{placeholder}}" data-type="{{type}}" />
+      <input
+        type="text"
+        name="add-item-name"
+        class="form-control add-item-name typeahead"
+        placeholder="{{placeholder}}"
+        data-type="{{type}}"
+      />
       <div class="add-item-actions">
-        <button type="button" class="btn btn-blue cancel-card-item"> Cancel </button>
-        <button class="btn btn-primary save-card-item"> <span class="btn-text">Add</span> <i class="loader loader-small"></i></button>
+        <button type="button" class="btn btn-blue cancel-card-item">
+          Cancel
+        </button>
+        <button class="btn btn-primary save-card-item">
+          <span class="btn-text">Add</span>
+          <i class="loader loader-small"></i></button>
       </div>
     </form>
   </div>
@@ -1447,68 +1604,68 @@
 *********************** //-->
 
 <script id="settings-template" type="text/x-handlebars-template">
-  <div class="subheader-wrapper">
-    {{>settings-subheader username=name page="settings"}}
-  </div>
-  <div class="main container-fluid">
-{% endraw %}
-    {{user_setting_note|safe}}
-{% raw %}
-    <form class="module clearfix" id="user-settings-form">
-      <table width="100%">
-        <tr>
-          <td>Profile Picture</td>
-          <td>
-            <span class="profile-picture">
-              <img class="headshot" src="{{defaultPhoto photo_url}}" alt="{{name}}">
-            </span>
-          </td>
-        </tr>
-        <tr>
-          <td>Name</td>
-          <td>
-            <span>{{full_name}}</span>
-          </td>
-        </tr>
-        <tr>
-          <td>Display Timezone</td>
-          <td>
-            <select class="form-control" name="time_zone">
-              {{#each timezones}}
-                <option value="{{this}}" {{isSelected ../time_zone this}}>{{this}}</option>
-              {{/each}}
-            </select>
-          </td>
-        </tr>
-        {{#each contactmodes}}
-        <tr>
-          <td>{{label}}</td>
-          <td>
-            <span>
-            {% endraw %} {% if usercontact_ui_readonly %} {% raw %}
-              {{#inArray mode ../telmodes}}
-                  {{#if value}}
-                    <a href="tel:{{value}}"> {{value}} </a>
-                  {{else}}
-                    {% endraw %}
-                      {{missing_number_note|safe}}
-                    {% raw %}
-                  {{/if}}
-              {{/inArray}}
-              {{^inArray mode ../telmodes}}
-                <span>{{value}}</span>
-              {{/inArray}}
-            {% endraw %} {% else %} {% raw %}
-                <input type="text" name="contactmode-{{mode}}" id="{{mode}}" class="form-control" value="{{value}}" />
-            {% endraw %} {% endif %} {% raw %}
-            </span>
-          </td>
-        </tr>
-        {{/each}}
-      </table>
-      <button type="submit" id="save-settings" class="btn btn-primary btn-sm pull-right"><span class="btn-text">Save Changes</span> <i class="loader loader-small"></i></button>
-    </form>
-  </div>
+    <div class="subheader-wrapper">
+      {{>settings-subheader username=name page="settings"}}
+    </div>
+    <div class="main container-fluid">
+  {% endraw %}
+      {{user_setting_note|safe}}
+  {% raw %}
+      <form class="module clearfix" id="user-settings-form">
+        <table width="100%">
+          <tr>
+            <td>Profile Picture</td>
+            <td>
+              <span class="profile-picture">
+                <img class="headshot" src="{{defaultPhoto photo_url}}" alt="{{name}}">
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td>Name</td>
+            <td>
+              <span>{{full_name}}</span>
+            </td>
+          </tr>
+          <tr>
+            <td>Display Timezone</td>
+            <td>
+              <select class="form-control" name="time_zone">
+                {{#each timezones}}
+                  <option value="{{this}}" {{isSelected ../time_zone this}}>{{this}}</option>
+                {{/each}}
+              </select>
+            </td>
+          </tr>
+          {{#each contactmodes}}
+          <tr>
+            <td>{{label}}</td>
+            <td>
+              <span>
+              {% endraw %} {% if usercontact_ui_readonly %} {% raw %}
+                {{#inArray mode ../telmodes}}
+                    {{#if value}}
+                      <a href="tel:{{value}}"> {{value}} </a>
+                    {{else}}
+                      {% endraw %}
+                        {{missing_number_note|safe}}
+                      {% raw %}
+                    {{/if}}
+                {{/inArray}}
+                {{^inArray mode ../telmodes}}
+                  <span>{{value}}</span>
+                {{/inArray}}
+              {% endraw %} {% else %} {% raw %}
+                  <input type="text" name="contactmode-{{mode}}" id="{{mode}}" class="form-control" value="{{value}}" />
+              {% endraw %} {% endif %} {% raw %}
+              </span>
+            </td>
+          </tr>
+          {{/each}}
+        </table>
+        <button type="submit" id="save-settings" class="btn btn-primary btn-sm pull-right"><span class="btn-text">Save Changes</span> <i class="loader loader-small"></i></button>
+      </form>
+    </div>
 </script>
 
 <!--// **********************
@@ -1598,7 +1755,10 @@
 </script>
 
 <!-- // notifications/reminders create partial -->
-<script id="module-notification-create-template" type="text/x-handlebars-template">
+<script
+  id="module-notification-create-template"
+  type="text/x-handlebars-template"
+>
   <form class="module module-card module-notification-create" {{#ifExists selected.id}} data-edit-id="{{selected.id}}" {{/ifExists}} data-type="{{#isEqual createType 'reminder'}}reminder{{else}}notification{{/isEqual}}">
     <div class="module-heading module-card-heading border-bottom">
       <h4>
@@ -1745,7 +1905,13 @@
 
 <!-- // ical key view partial -->
 <script id="module-ical-key-template" type="text/x-handlebars-template">
-  <h3 class="module-heading"> {{capitalize key_type}} Calendar Keys <button id="create-ical-key-{{key_type}}" class="btn btn-primary pull-right">+ {{capitalize key_type}} Ical Key</button></h3>
+  <h3 class="module-heading">
+    {{capitalize key_type}}
+    Calendar Keys
+    <button
+      id="create-ical-key-{{key_type}}"
+      class="btn btn-primary pull-right"
+    >+ {{capitalize key_type}} Ical Key</button></h3>
   <div class="ical-key-{{key_type}}-create-container">
     <!--// create form renders here -->
   </div>
@@ -1754,13 +1920,36 @@
       <thead><th>{{capitalize key_type}} Name</th><th>Key</th><th>Time Created</th></thead>
       <tbody>
         {{#each keys}}
-        <tr>
-          <td><span>{{this.name}}</span></td>
-          <td><span><a href="{% endraw %}{{public_calendar_base_url}}{% raw %}/{{this.key}}">{{this.key}}</a></span></td>
-          <td><span>{{this.time_created}}</span></td>
-          <td><button id="update-ical-key" class="btn btn-warning btn-sm pull-right" type="button" data-toggle="modal" data-target="#confirm-action-modal" data-modal-action="oncall.settings.ical_key.updateIcalKey" data-modal-title="Regenerate Ical Key for {{this.type}} {{this.name}}" data-modal-content="Regenerating an ical key will invalidate the existing key." data-ical-type="{{this.type}}" data-ical-name="{{this.name}}">Regenerate</button></td>
-          <td><button id="delete-ical-key" class="btn btn-danger btn-sm pull-right" type="button" data-toggle="modal" data-target="#confirm-action-modal" data-modal-action="oncall.settings.ical_key.deleteIcalKey" data-modal-title="Delete Ical Key for {{this.type}} {{this.name}}" data-modal-content="Invalidate key {{this.key}}?" data-ical-key="{{this.key}}">Delete</button></td>
-        </tr>
+          <tr>
+            <td><span>{{this.name}}</span></td>
+            <td><span><a
+                  href="{% endraw %}{{public_calendar_base_url}}{% raw %}/{{this.key}}"
+                >{{this.key}}</a></span></td>
+            <td><span>{{this.time_created}}</span></td>
+            <td><button
+                id="update-ical-key"
+                class="btn btn-warning btn-sm pull-right"
+                type="button"
+                data-toggle="modal"
+                data-target="#confirm-action-modal"
+                data-modal-action="oncall.settings.ical_key.updateIcalKey"
+                data-modal-title="Regenerate Ical Key for {{this.type}} {{this.name}}"
+                data-modal-content="Regenerating an ical key will invalidate the existing key."
+                data-ical-type="{{this.type}}"
+                data-ical-name="{{this.name}}"
+              >Regenerate</button></td>
+            <td><button
+                id="delete-ical-key"
+                class="btn btn-danger btn-sm pull-right"
+                type="button"
+                data-toggle="modal"
+                data-target="#confirm-action-modal"
+                data-modal-action="oncall.settings.ical_key.deleteIcalKey"
+                data-modal-title="Delete Ical Key for {{this.type}} {{this.name}}"
+                data-modal-content="Invalidate key {{this.key}}?"
+                data-ical-key="{{this.key}}"
+              >Delete</button></td>
+          </tr>
         {{/each}}
       </tbody>
     </table>
@@ -1769,31 +1958,49 @@
 
 <!-- // ical key create partial -->
 <script id="module-ical-key-create-template" type="text/x-handlebars-template">
-  <form class="module module-card module-ical-key-create" data-type="{{createType}}">
+  <form
+    class="module module-card module-ical-key-create"
+    data-type="{{createType}}"
+  >
     <div class="module-heading module-card-heading border-bottom">
       <h4>Create a new {{createType}} calendar key</h4>
     </div>
     <div class="ical-key-create-body">
       {{#isEqual createType "user"}}
-      <select class="form-control ical-key-create-name" type="text" placeholder="Enter your username here" >
-        {{#each icalKeyOptions}}
-        <option value="{{this}}">{{this}}</option>
-        {{/each}}
-      </select>
+        <select
+          class="form-control ical-key-create-name"
+          type="text"
+          placeholder="Enter your username here"
+        >
+          {{#each icalKeyOptions}}
+            <option value="{{this}}">{{this}}</option>
+          {{/each}}
+        </select>
       {{/isEqual}}
       {{#isEqual createType "team"}}
-      <input class="form-control ical-key-create-name" type="text" placeholder="Enter your team name here" list="ical-key-options-team" />
-      <datalist id="ical-key-options-team">
-        {{#each icalKeyOptions}}
-        <option value="{{this}}">{{this}}</option>
-        {{/each}}
-      </datalist>
+        <input
+          class="form-control ical-key-create-name"
+          type="text"
+          placeholder="Enter your team name here"
+          list="ical-key-options-team"
+        />
+        <datalist id="ical-key-options-team">
+          {{#each icalKeyOptions}}
+            <option value="{{this}}">{{this}}</option>
+          {{/each}}
+        </datalist>
       {{/isEqual}}
     </div>
     <div class="border-top notification-actions clearfix">
       <div class="pull-right">
-        <button class="btn btn-primary ical-key-create-save" type="submit"><span class="btn-text">Save</span> <i class="loader loader-small"></i> </button>
-        <button class="btn btn-blue ical-key-create-cancel" type="button"> Cancel </button>
+        <button class="btn btn-primary ical-key-create-save" type="submit"><span
+            class="btn-text"
+          >Save</span>
+          <i class="loader loader-small"></i>
+        </button>
+        <button class="btn btn-blue ical-key-create-cancel" type="button">
+          Cancel
+        </button>
       </div>
     </div>
   </form>
@@ -1807,7 +2014,11 @@
   <div class="main floating-module error-page">
     <div class="module">
       <div class="logo-wrapper">
-        <img src="/static/images/oncall_logo_blue.png" width="100" alt="Oncall logo">
+        <img
+          src="/static/images/oncall_logo_blue.png"
+          width="100"
+          alt="Oncall logo"
+        />
       </div>
       <div>
         <h1 class="error-code">{{error_code}}</h1>
@@ -1817,5 +2028,4 @@
     </div>
   </div>
 </script>
-{% endraw %}
-{% endblock %}
+{% endraw %} {% endblock %}
