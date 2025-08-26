@@ -31,8 +31,8 @@ def json_error_serializer(req, resp, exception):
 class SecurityHeaderMiddleware(object):
     def __init__(self, config):
         self.config = config
-        self.allowed_origins = ' '.join(self.config.get('allow_origins_list', []) + [os.environ.get("IRIS_API_HOST", self.config.get('iris_plan_integration', {}).get('api_host', ''))])
-        
+        self.allowed_origins = os.environ.get("ALLOW_ORIGINS_LIST").split(',')
+
     def process_request(self, req, resp):
         nonce = secrets.token_urlsafe(16)
         req.context['nonce'] = nonce
