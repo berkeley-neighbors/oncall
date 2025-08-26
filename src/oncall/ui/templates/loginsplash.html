@@ -6,7 +6,27 @@
     <link href="{{ ASSET_URL }}" rel="stylesheet" />
     {% endassets %} {% assets "loginsplash_css" %}
     <link href="{{ ASSET_URL }}" rel="stylesheet" />
-    {% endassets %}
+    {% endassets %} {% if synology_sdk_url %}
+    <script src="{{ synology_sdk_url }}"></script>
+    <script nonce="{{ nonce }}">
+      SYNOSSO.init({
+        oauthserver_url: "{{ oauthserver_url }}",
+        app_id: "{{ synology_app_id }}",
+        redirect_uri: "{{ redirect_uri }}",
+        scope: "user_id",
+        callback: function (response) {
+          if (response.status === "login") {
+            window.location.href =
+              "/auth-response?token=" + response.access_token;
+          }
+
+          if (response.status === "not_login") {
+            alert("Synology SSO login failed");
+          }
+        },
+      });
+    </script>
+    {% endif %}
     <title>Oncall</title>
   </head>
   <body>
@@ -23,6 +43,12 @@
         </div>
 
         <div class="container">
+          <!-- Synology SSO Login Button -->
+          {% if synology_sdk_url %}
+          <button type="button" id="synology-sso-login">
+            Sign in with Synology SSO
+          </button>
+          {% else %}
           <label for="username"><b>Username</b></label>
           <input
             type="text"
@@ -40,6 +66,7 @@
           />
 
           <button type="submit">Sign in</button>
+          {% endif %}
         </div>
       </form>
     </div>

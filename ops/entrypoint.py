@@ -1,25 +1,34 @@
 # Copyright (c) LinkedIn Corporation. All rights reserved. Licensed under the BSD-2 Clause license.
 # See LICENSE in the project root for license information.
 
+import logging
 import subprocess
-import os
+from os import environ, path, execv
 import socket
 import time
 import sys
 from glob import glob
-from oncall.utils import read_config
 
 dbpath = '/home/oncall/db'
 initializedfile = '/home/oncall/db_initialized'
 
+logger = logging.getLogger()
 
-def load_sqldump(config, sqlfile, one_db=True):
+SCHEME = 'mysql+pymysql'
+PORT = 3306
+CHARSET = 'utf8'
+USER = 'root'
+DATABASE = 'oncall'
+HOST = environ.get('MYSQL_HOST', 'localhost')
+PASSWORD = environ.get('MYSQL_ROOT_PASSWORD')
+
+def load_sqldump(sqlfile, one_db=True):
     print('Importing %s...' % sqlfile)
     with open(sqlfile) as h:
-        cmd = ['/usr/bin/mysql', '-h', config['host'], '-u',
-               config['user'], '-p' + config['password'],'-P' + str(config['port'])]
+        cmd = ['/usr/bin/mysql', '-h', HOST, '-u',
+               USER, '-p' + PASSWORD,'-P' + str(PORT)]
         if one_db:
-            cmd += ['-o', config['database']]
+            cmd += ['-o', DATABASE]
         proc = subprocess.Popen(cmd, stdin=h)
         proc.communicate()
 
@@ -33,9 +42,9 @@ def load_sqldump(config, sqlfile, one_db=True):
             return False
 
 
-def wait_for_mysql(config):
-    print('Checking MySQL liveness on %s...' % config['host'])
-    db_address = (config['host'], config['port'])
+def wait_for_mysql():
+    print('Checking MySQL liveness on %s...' % HOST)
+    db_address = (HOST, PORT)
     tries = 0
     while True:
         try:
@@ -54,19 +63,19 @@ def wait_for_mysql(config):
             continue
 
 
-def initialize_mysql_schema(config):
+def initialize_mysql_schema():
     print('Initializing oncall database')
     # disable one_db to let schema.v0.sql create the database
-    re = load_sqldump(config, os.path.join(dbpath, 'schema.v0.sql'), one_db=False)
+    re = load_sqldump(path.join(dbpath, 'schema.v0.sql'), one_db=False)
     if not re:
         sys.exit('Failed to load schema into DB.')
 
-    for f in glob(os.path.join(dbpath, 'patches', '*.sql')):
-        re = load_sqldump(config, f)
+    for f in glob(path.join(dbpath, 'patches', '*.sql')):
+        re = load_sqldump(f)
         if not re:
             sys.exit('Failed to load DB patche: %s.' % f)
 
-    re = load_sqldump(config, os.path.join(dbpath, 'dummy_data.sql'))
+    re = load_sqldump(path.join(dbpath, 'dummy_data.sql'))
     if not re:
         sys.stderr.write('Failed to load dummy data.')
 
@@ -75,19 +84,15 @@ def initialize_mysql_schema(config):
 
 
 def main():
-    oncall_config = read_config(
-        os.environ.get('ONCALL_CFG_PATH', '/home/oncall/config/config.yaml'))
-    mysql_config = oncall_config['db']['conn']['kwargs']
-
     # It often takes several seconds for MySQL to start up. oncall dies upon start
     # if it can't immediately connect to MySQL, so we have to wait for it.
-    wait_for_mysql(mysql_config)
+    wait_for_mysql()
 
-    if os.environ.get('DOCKER_DB_BOOTSTRAP') != '0':
-        if not os.path.exists(initializedfile):
-            initialize_mysql_schema(mysql_config)
+    if environ.get('DOCKER_DB_BOOTSTRAP') != '0':
+        if not path.exists(initializedfile):
+            initialize_mysql_schema()
 
-    os.execv('/usr/bin/uwsgi',
+    execv('/usr/bin/uwsgi',
              ['/usr/bin/uwsgi', '--yaml', '/home/oncall/daemons/uwsgi.yaml:prod'])
 
 
