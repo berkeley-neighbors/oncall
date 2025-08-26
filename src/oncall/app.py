@@ -16,6 +16,7 @@ from . import db, constants, iris, auth
 import logging
 logger = logging.getLogger('oncall.app')
 
+ALLOW_ORIGINS_LIST = os.environ.get("ALLOW_ORIGINS_LIST").split(',')
 security_headers = [
     ('X-Frame-Options', 'SAMEORIGIN'),
     ('X-Content-Type-Options', 'nosniff'),
@@ -31,7 +32,6 @@ def json_error_serializer(req, resp, exception):
 class SecurityHeaderMiddleware(object):
     def __init__(self, config):
         self.config = config
-        self.allowed_origins = os.environ.get("ALLOW_ORIGINS_LIST").split(',')
 
     def process_request(self, req, resp):
         nonce = secrets.token_urlsafe(16)
@@ -43,7 +43,7 @@ class SecurityHeaderMiddleware(object):
              "font-src 'self' data: blob; img-src data: uri https: http:; "
              "script-src 'unsafe-eval' 'self' %s '%s'; "
              "style-src 'unsafe-inline' https: http:;" %
-             (self.allowed_origins, f'nonce-{nonce}')))
+             (ALLOW_ORIGINS_LIST, f'nonce-{nonce}')))
         
         resp.set_headers(security_headers)
 
@@ -80,7 +80,7 @@ application = None
 
 def init_falcon_api(config):
     global application
-    cors = CORS(allow_origins_list=config.get('allow_origins_list', []))
+    cors = CORS(allow_origins_list=ALLOW_ORIGINS_LIST)
     middlewares = [
         SecurityHeaderMiddleware(config),
         ReqBodyMiddleware(),
