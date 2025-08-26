@@ -1,8 +1,7 @@
 server:
   host: 0.0.0.0
   port: 8080
-debug: False
-require_auth: True
+debug: True
 oncall_host: http://localhost:8080
 metrics: dummy
 db:
@@ -24,8 +23,7 @@ session:
   sign_key: '123'
 auth:
   debug: False
-  module: 'oncall.auth.modules.synology_sso_auth'
-  import_user: True
+  module: 'oncall.auth.modules.debug'
 notifier:
   skipsend: True
 healthcheck_path: /tmp/status
@@ -34,8 +32,8 @@ messengers:
     application: oncall
     iris_api_key: magic
 
-allow_origins_list:
-  - 'https://sso.berkeleyneighbors.org'
+# allow_origins_list:
+#   - http://www.example.com
 
 supported_timezones:
   - 'US/Pacific'

@@ -88,7 +88,6 @@ def index(req, resp):
     if not user:
         user = req.env.get('beaker.session', {}).get('user')
 
-    logger.info("here we go")
     if user is None and LOGIN_REQUIRED:
         resp.content_type = 'text/html'
         resp.text = jinja2_env.get_template('loginsplash.html').render(
