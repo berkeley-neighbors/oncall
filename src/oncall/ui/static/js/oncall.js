@@ -2578,8 +2578,7 @@ var oncall = {
       var $form = $(e.target),
           $cta = $form.find('button[type="submit"]'),
           url = this.data.url + oncall.data.user,
-          data = $form.find('select[name="time_zone"]').val(),
-          full_name = $form.find('input[name="full_name"]').val();
+          data = $form.find('select[name="time_zone"]').val();
           userContactsElements = this.data.$form + ' input[type=text][name^="contactmode-"]';
           userContacts = {};
 
@@ -2595,7 +2594,7 @@ var oncall = {
         url: url,
         dataType: 'html',
         contentType: 'application/json',
-        data: JSON.stringify({contacts: userContacts, time_zone: data, full_name: full_name})
+        data: JSON.stringify({contacts: userContacts, time_zone: data})
       }).done(function(){
         oncall.data.userTimezone = data;
         oncall.alerts.createAlert('Settings saved.', 'success', $form);
