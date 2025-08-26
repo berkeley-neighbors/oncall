@@ -6,8 +6,8 @@
     <link href="{{ ASSET_URL }}" rel="stylesheet" />
     {% endassets %} {% assets "loginsplash_css" %}
     <link href="{{ ASSET_URL }}" rel="stylesheet" />
-    {% endassets %} {% if synology_js_url %}
-    <script src="{{ synology_js_url }}"></script>
+    {% endassets %} {% if synology_sdk_url %}
+    <script src="{{ synology_sdk_url }}"></script>
     <script nonce="{{ nonce }}">
       SYNOSSO.init({
         oauthserver_url: "{{ oauthserver_url }}",
@@ -44,7 +44,7 @@
 
         <div class="container">
           <!-- Synology SSO Login Button -->
-          {% if synology_js_url %}
+          {% if synology_sdk_url %}
           <button type="button" id="synology-sso-login">
             Sign in with Synology SSO
           </button>

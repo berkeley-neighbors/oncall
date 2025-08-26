@@ -91,7 +91,7 @@ def index(req, resp):
     if user is None and LOGIN_REQUIRED:
         resp.content_type = 'text/html'
         resp.text = jinja2_env.get_template('loginsplash.html').render(
-            synology_js_url=SYNOLOGY_SDK_URL,
+            synology_sdk_url=SYNOLOGY_SDK_URL,
             oauthserver_url=SYNOLOGY_OAUTH_URL,
             synology_app_id=SYNOLOGY_APP_ID,
             redirect_uri=SYNOLOGY_REDIRECT_URI,
