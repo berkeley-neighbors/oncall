@@ -34,12 +34,6 @@ messengers:
     application: oncall
     iris_api_key: magic
 
-synology:
-  app_id: 'c4d5d6343ba0b2e21fd48fee09177c49'
-  sso_url: 'https://sso.berkeleyneighbors.org'
-  js_sdk_url: 'https://sso.berkeleyneighbors.org/webman/sso/synoSSO-1.0.0.js'
-  redirect_uri: 'http://127.0.0.1:8080/auth-response'
-
 allow_origins_list:
   - 'https://sso.berkeleyneighbors.org'
 

@@ -9,6 +9,11 @@ services:
     environment:
       - DOCKER_DB_BOOTSTRAP=1
       - IRIS_API_HOST=iris
+      - SYNOLOGY_APP_ID=your_app_id
+      - SYNOLOGY_REDIRECT_URI=your_redirect_uri
+      - SYNOLOGY_OAUTH_URL=your_api_host
+      - SYNOLOGY_SDK_URL=your_sdk_url
+
     volumes:
       - ./configs/config.docker.yaml:/home/oncall/config/config.yaml
     networks:

@@ -75,7 +75,7 @@ LOGIN_REQUIRED = None
 TEAM_MANAGED_MESSAGE = None
 SYNOLOGY_APP_ID = None
 SYNOLOGY_REDIRECT_URI = None
-SYNOLOGY_JS_SDK = None
+SYNOLOGY_SDK_URL = None
 SYNOLOGY_OAUTH_URL = None
 
 def index(req, resp):
@@ -91,7 +91,7 @@ def index(req, resp):
     if user is None and LOGIN_REQUIRED:
         resp.content_type = 'text/html'
         resp.text = jinja2_env.get_template('loginsplash.html').render(
-            synology_js_url=SYNOLOGY_JS_SDK,
+            synology_js_url=SYNOLOGY_SDK_URL,
             oauthserver_url=SYNOLOGY_OAUTH_URL,
             synology_app_id=SYNOLOGY_APP_ID,
             redirect_uri=SYNOLOGY_REDIRECT_URI,
@@ -160,7 +160,7 @@ def init(application, config):
     global PUBLIC_CALENDAR_ADDITIONAL_MESSAGE
     global LOGIN_REQUIRED
     global TEAM_MANAGED_MESSAGE
-    global SYNOLOGY_JS_SDK
+    global SYNOLOGY_SDK_URL
     global SYNOLOGY_OAUTH_URL
     global SYNOLOGY_APP_ID
     global SYNOLOGY_REDIRECT_URI
@@ -170,12 +170,11 @@ def init(application, config):
     IRIS_PLAN_SETTINGS = config.get('iris_plan_integration')
     USERCONTACT_UI_READONLY = config.get('usercontact_ui_readonly', True)
     PUBLIC_CALENDAR_BASE_URL = config.get('public_calendar_base_url')
-    SYNOLOGY = config.get('synology')
 
-    SYNOLOGY_JS_SDK = SYNOLOGY.get('js_sdk_url')
-    SYNOLOGY_OAUTH_URL = SYNOLOGY.get('sso_url')
-    SYNOLOGY_APP_ID = SYNOLOGY.get('app_id')
-    SYNOLOGY_REDIRECT_URI = SYNOLOGY.get('redirect_uri')
+    SYNOLOGY_SDK_URL = environ.get('SYNOLOGY_SDK_URL')
+    SYNOLOGY_OAUTH_URL = environ.get('SYNOLOGY_OAUTH_URL')
+    SYNOLOGY_APP_ID = environ.get('SYNOLOGY_APP_ID')
+    SYNOLOGY_REDIRECT_URI = environ.get('SYNOLOGY_REDIRECT_URI')
 
     PUBLIC_CALENDAR_ADDITIONAL_MESSAGE = config.get('public_calendar_additional_message')
     LOGIN_REQUIRED = config.get('require_auth')
