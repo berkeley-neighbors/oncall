@@ -43,6 +43,7 @@ assets_env.register('loginsplash_js', Bundle(
     output='bundles/loginsplash.bundle.js'))
 
 logger = logging.getLogger('webassets')
+
 logger.addHandler(logging.StreamHandler())
 
 jinja2_env = Jinja2Environment(extensions=[AssetsExtension], autoescape=True)
@@ -81,8 +82,8 @@ SYNOLOGY_OAUTH_URL = None
 def index(req, resp):
     # attempt SSO login first then default to session based login
     user = None
-    if auth.sso_auth_manager:
-        user = auth.sso_auth_manager.authenticate(req)
+    if auth.auth_manager:
+        user = auth.auth_manager.authenticate(req)
         
     if not user:
         user = req.env.get('beaker.session', {}).get('user')

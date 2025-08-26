@@ -1,15 +1,13 @@
 import logging
 import requests
 from oncall import db
+from os import environ
 
 logger = logging.getLogger(__name__)
 
 class Authenticator:
     def __init__(self, config):
-        print('Initializing Synology SSO Authenticator with config:', config)
         self.config = config
-        self.import_user = config.get('auth').get('import_user', False)
-        # Add more config as needed for SSO
 
     def authenticate(self, req):
         logger.info(f'Authenticating with Synology SSO using access token: {req}')
@@ -19,16 +17,16 @@ class Authenticator:
         if not access_token:
             return False
 
-        logger.info('Validating access token with Synology SSO provider')
-        synology_config = self.config.get('synology')
-        logger.debug(f'Synology Config: {synology_config}')
-        sso_validate_url = synology_config.get('sso_url') + '/webman/sso/SSOAccessToken.cgi'
-        app_id = synology_config.get('app_id')
-        logger.debug(f'App ID: {app_id}')
+        logger.debug('Validating access token with Synology SSO provider')
+        SYNOLOGY_APP_ID = environ.get('SYNOLOGY_APP_ID')
+        SYNOLOGY_OAUTH_URL = environ.get('SYNOLOGY_OAUTH_URL')
+        sso_validate_url = SYNOLOGY_OAUTH_URL + '/webman/sso/SSOAccessToken.cgi'
+        logger.debug(f'App ID: {SYNOLOGY_APP_ID}')
+        
         params = {
             'action': 'exchange',
             'access_token': access_token,
-            'app_id': app_id
+            'app_id': SYNOLOGY_APP_ID
         }
         logger.debug('Sending request to Synology SSO validate URL: %s with params: %s', sso_validate_url, params)
         resp = requests.get(sso_validate_url, params=params)
@@ -52,13 +50,14 @@ class Authenticator:
         exists = cursor.fetchone()
 
         if not exists:
-            if self.import_user:
-                cursor.execute('INSERT INTO user (id, name, full_name, active) VALUES (%s, %s, %s, TRUE)', (user_id, user_name, user_name))
-                logger.info('Imported new user from Synology SSO: %s (%s)', user_id, user_name)
-                conn.commit()
-            else:
-                user_name = False
-        
+            cursor.execute('INSERT INTO user (id, name, full_name, active) VALUES (%s, %s, %s, TRUE)', (user_id, user_name, user_name))
+            logger.info('Imported new user from Synology SSO: %s (%s)', user_id, user_name)
+            conn.commit()
+            cursor.execute('INSERT INTO `user_contact` (`user_id`, `mode_id`, `destination`) VALUES (%s, %s, %s)', (user_id, 1, ''))
+            cursor.execute('INSERT INTO `user_contact` (`user_id`, `mode_id`, `destination`) VALUES (%s, %s, %s)', (user_id, 2, ''))
+            cursor.execute('INSERT INTO `user_contact` (`user_id`, `mode_id`, `destination`) VALUES (%s, %s, %s)', (user_id, 3, ''))
+            conn.commit()
+
         cursor.close()
         conn.close()
 

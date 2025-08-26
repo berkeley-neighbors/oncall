@@ -9,11 +9,20 @@ import base64
 import importlib
 from urllib.parse import quote
 from falcon import HTTPUnauthorized, HTTPForbidden, Request
+from os import environ
+
 from .. import db
 
 logger = logging.getLogger('oncall.auth')
 auth_manager = None
-sso_auth_manager = None
+
+auth_method_modules = {
+    "debug": "oncall.auth.modules.debug",
+    "synology": "oncall.auth.modules.synology",
+    "ldap": "oncall.auth.modules.ldap_import"
+}
+
+AUTH_METHOD = environ.get("AUTH_METHOD")
 
 def debug_only(function):
     def wrapper(*args, **kwargs):
@@ -186,10 +195,8 @@ def authenticate_application(auth_token, req):
 
 
 def _authenticate_user(req):
-    global sso_auth_manager
-    # pass the req to the sso_auth_manager so it can check if it has valid SSO headers
-    if sso_auth_manager:
-        user = sso_auth_manager.authenticate(req)
+    if AUTH_METHOD == "synology":
+        user = auth_manager.authenticate(req)
         if user:
             req.context['user'] = user
             return
@@ -221,7 +228,6 @@ def _authenticate_user(req):
 
 authenticate_user = _authenticate_user
 
-
 def login_required(function):
     def wrapper(*args, **kwargs):
         for i, arg in enumerate(args):
@@ -245,15 +251,13 @@ def init(application, config):
     global check_calendar_auth_by_id
     global debug_only
     global auth_manager
-    global sso_auth_manager
     global authenticate_user
     
-    if config.get('auth').get('module'):
-        auth = importlib.import_module(config.get('auth').get('module'))
-        if auth.SSO:
-            sso_auth_manager = getattr(auth, 'Authenticator')(config)
+    if AUTH_METHOD in auth_method_modules:
+        auth = importlib.import_module(auth_method_modules[AUTH_METHOD])
+        auth_manager = getattr(auth, 'Authenticator')(config)
 
-    if config.get('auth').get('debug', False):
+    if AUTH_METHOD == "debug":
         def authenticate_user_test_wrapper(req):
             try:
                 _authenticate_user(req)
@@ -268,15 +272,12 @@ def init(application, config):
         check_calendar_auth = lambda x, y, **kwargs: True
         check_calendar_auth_by_id = lambda x, y: True
         debug_only = lambda function: function
-
-    if config.get('auth').get('docs') or config.get('auth').get('require_auth'):
+    else: 
         # Replace login_required decorator with identity function for autodoc generation
         # Also replace if require_auth is True, since AuthMiddleware already handles login for us
         global login_required
         login_required = lambda x: x
-    else:
-        auth = importlib.import_module(config.get('auth').get('module'))
-        auth_manager = getattr(auth, 'Authenticator')(config)
+
     from . import login, logout, auth_response
 
     application.add_route('/login', login)

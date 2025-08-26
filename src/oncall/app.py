@@ -4,19 +4,19 @@ from urllib.parse import unquote_plus
 from importlib import import_module
 
 import falcon
-import os
+from os import environ
 import re
 from beaker.middleware import SessionMiddleware
 from falcon_cors import CORS
 import secrets
-import base64
 
 from . import db, constants, iris, auth
 
 import logging
+
 logger = logging.getLogger('oncall.app')
 
-ALLOW_ORIGINS_LIST = os.environ.get("ALLOW_ORIGINS_LIST").split(',')
+ALLOW_ORIGINS_LIST = ' '.join(environ.get("ALLOW_ORIGINS_LIST").split(','))
 security_headers = [
     ('X-Frame-Options', 'SAMEORIGIN'),
     ('X-Content-Type-Options', 'nosniff'),
@@ -78,7 +78,14 @@ class AuthMiddleware(object):
 application = None
 
 
+def generic_error_handler(req, resp, ex, params, ws=None):
+    logger.error("Error occurred: %s", ex)
+    resp.status = falcon.HTTP_500
+    resp.body = {"error": str(ex)}
+
+
 def init_falcon_api(config):
+    logger.info("Initializing Falcon API")
     global application
     cors = CORS(allow_origins_list=ALLOW_ORIGINS_LIST)
     middlewares = [
@@ -92,6 +99,8 @@ def init_falcon_api(config):
     application.req_options.auto_parse_form_urlencoded = False
     application.set_error_serializer(json_error_serializer)
     application.req_options.strip_url_path_trailing_slash = True
+    application.add_error_handler(Exception, generic_error_handler)
+
     from .auth import init as init_auth
     init_auth(application, config)
 
@@ -153,12 +162,12 @@ def init(config):
         'session.type': 'cookie',
         'session.cookie_expires': True,
         'session.key': 'oncall-auth',
-        'session.encrypt_key': config['session']['encrypt_key'],
-        'session.validate_key': config['session']['sign_key'],
-        'session.secure': not (config.get('debug', False) or config.get('allow_http', False)),
+        'session.encrypt_key': environ.get('SESSION_ENCRYPT_KEY'),
+        'session.validate_key': environ.get('SESSION_VALIDATE_KEY'),
+        'session.secure': environ.get('ALLOW_HTTP', False),
         'session.httponly': True,
         'session.crypto_type': 'cryptography',
-        'session.domain': config.get('oncall_host')
+        'session.domain': environ.get('HOST'),
     }
     application = SessionMiddleware(application, session_opts)
     application = RawPathPatcher(application)
