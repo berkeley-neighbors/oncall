@@ -274,7 +274,6 @@ def init(application, config):
         debug_only = lambda function: function
     else: 
         # Replace login_required decorator with identity function for autodoc generation
-        # Also replace if require_auth is True, since AuthMiddleware already handles login for us
         global login_required
         login_required = lambda x: x
 
