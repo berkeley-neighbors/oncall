@@ -1323,6 +1323,7 @@
 <!-- // default-scheduler-template -->
 <script id="default-scheduler-template" type="text/x-handlebars-template">
 
+
   The default scheduler prioritizes users who haven't been on-call for the
   longest period of time. It respects conflicting events on the team's calendar
   as well (for example, it will not schedule someone to be on-call if that user
@@ -1331,6 +1332,7 @@
 
 <!-- // round-robin-scheduler-template -->
 <script id="round-robin-scheduler-template" type="text/x-handlebars-template">
+
 
   Determines employee order
   <div class="round-robin-scheduler">
@@ -1366,6 +1368,7 @@
   type="text/x-handlebars-template"
 >
 
+
   The Default (allow duplicate) scheduler uses the same algorithm as Default,
   but allows more than one user to be on-call at the same time for a given role.
   This lets you have duplicate primary events across several schedule templates.
@@ -1373,6 +1376,7 @@
 
 <!-- allow-duplicate scheduler template -->
 <script id="multi-team-template" type="text/x-handlebars-template">
+
 
   The Default (multi-team aware) scheduler uses the same algorithm as Default,
   but allows more than one user to be on-call at the same time for a given role.
@@ -1642,22 +1646,7 @@
             <td>{{label}}</td>
             <td>
               <span>
-              {% endraw %} {% if usercontact_ui_readonly %} {% raw %}
-                {{#inArray mode ../telmodes}}
-                    {{#if value}}
-                      <a href="tel:{{value}}"> {{value}} </a>
-                    {{else}}
-                      {% endraw %}
-                        {{missing_number_note|safe}}
-                      {% raw %}
-                    {{/if}}
-                {{/inArray}}
-                {{^inArray mode ../telmodes}}
-                  <span>{{value}}</span>
-                {{/inArray}}
-              {% endraw %} {% else %} {% raw %}
-                  <input type="text" name="contactmode-{{mode}}" id="{{mode}}" class="form-control" value="{{value}}" />
-              {% endraw %} {% endif %} {% raw %}
+                <input type="text" name="contactmode-{{mode}}" id="{{mode}}" class="form-control" value="{{value}}" />
               </span>
             </td>
           </tr>
