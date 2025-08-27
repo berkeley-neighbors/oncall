@@ -63,10 +63,7 @@ mimes = {
 }
 
 
-INDEX_CONTENT_SETTING = {
-    'footer': '<ul><li>Oncall © LinkedIn %s</li><li><a href="http://oncall.tools" target="_blank">About</a></li></ul>' % date.today().year,
-}
-
+FOOTER_CONTENT = None
 SLACK_INSTANCE = None
 HEADER_COLOR = None
 IRIS_PLAN_SETTINGS = None
@@ -103,7 +100,7 @@ def index(req, resp):
             iris_plan_settings=IRIS_PLAN_SETTINGS,
             public_calendar_base_url=PUBLIC_CALENDAR_BASE_URL,
             public_calendar_additional_message=PUBLIC_CALENDAR_ADDITIONAL_MESSAGE,
-            footer=INDEX_CONTENT_SETTING['footer'],
+            footer=FOOTER_CONTENT,
             timezones=SUPPORTED_TIMEZONES,
             team_managed_message=TEAM_MANAGED_MESSAGE
         )
@@ -141,11 +138,6 @@ class StaticResource(object):
 
 
 def init(application, config):
-    index_content_cfg = config.get('index_content_setting')
-    if index_content_cfg:
-        for k in index_content_cfg:
-            INDEX_CONTENT_SETTING[k] = index_content_cfg[k]
-
     global SLACK_INSTANCE
     global HEADER_COLOR
     global IRIS_PLAN_SETTINGS
@@ -156,17 +148,19 @@ def init(application, config):
     global SYNOLOGY_OAUTH_URL
     global SYNOLOGY_APP_ID
     global SYNOLOGY_REDIRECT_URI
+    global FOOTER_CONTENT
     
     SLACK_INSTANCE = config.get('slack_instance')
     HEADER_COLOR = config.get('header_color', '#3a3a3a')
     IRIS_PLAN_SETTINGS = config.get('iris_plan_integration')
     PUBLIC_CALENDAR_BASE_URL = config.get('public_calendar_base_url')
 
+    FOOTER_CONTENT = environ.get('FOOTER_CONTENT')
     SYNOLOGY_SDK_URL = environ.get('SYNOLOGY_SDK_URL')
     SYNOLOGY_OAUTH_URL = environ.get('SYNOLOGY_OAUTH_URL')
     SYNOLOGY_APP_ID = environ.get('SYNOLOGY_APP_ID')
     SYNOLOGY_REDIRECT_URI = environ.get('SYNOLOGY_REDIRECT_URI')
-
+    
     PUBLIC_CALENDAR_ADDITIONAL_MESSAGE = config.get('public_calendar_additional_message')
     TEAM_MANAGED_MESSAGE = config.get('team_managed_message')
 

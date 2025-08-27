@@ -123,14 +123,6 @@ supported_timezones:
   - 'Asia/Shanghai'
   - 'UTC'
 
-index_content_setting:
-  # Page footer contents
-  #footer: |
-  #  <ul>
-  #    <li>Oncall (c) LinkedIn 2020</li>
-  #    <li>Feedback</li>
-  #    <li><a href="http://oncall.tools" target="_blank">About</a></li>
-  #  </ul>
 header_color: '#3a3a3a'
 
 # The base url for the public oncall calendar. This url has to open to the public internet for most web calendar subscriptions to work.

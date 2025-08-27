@@ -7,7 +7,6 @@ config = {'auth': {'debug': True, 'module': 'oncall.auth.modules.debug', 'docs':
           'debug': True,
           'header_color': '#3a3a3a',
           'healthcheck_path': '/tmp/status',
-          'index_content_setting': {'footer': ''},
           'session': {'encrypt_key': 'abc', 'sign_key': '123'}}
 
 app = init_falcon_api(config)  # noqa
