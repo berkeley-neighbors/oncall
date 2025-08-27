@@ -547,46 +547,81 @@
 
 <!--// Card inner slim partial -->
 <script id="card-inner-slim-template" type="text/x-handlebars-template">
-  <li class="card-inner card-inner-slim" data-card-name="{{this.name}}" data-collapsed="true">
-    <img class="card-picture-small" src="{{getUserInfo this @root.users 'photo_url'}}" alt="{{getUserInfo this @root.users 'full_name'}}">
+  <li
+    class="card-inner card-inner-slim"
+    data-card-name="{{this.name}}"
+    data-collapsed="true"
+  >
+    <img
+      class="card-picture-small"
+      src="{{getUserInfo this @root.users 'photo_url'}}"
+      alt="{{getUserInfo this @root.users 'full_name'}}"
+    />
     <span class="card-inner-user">
-      <strong>{{getUserInfo this @root.users 'full_name'}}</strong>
+      <strong>{{getUserInfo this @root.users "full_name"}}</strong>
     </span>
     {{#unless this.in_rotation}}
       <span class="badge badge-gray pull-right">Out Of Rotation</span>
     {{/unless}}
     <div class="light small">
       <i class="svg-icon svg-icon-chevron svg-icon-chevron-down pull-right">
-        <svg xmlns="http://www.w3.org/2000/svg" width="12px" height="12px" viewBox="0 0 10 10" style="fill: currentColor">
-          <path d="M1.5 0l-1.5 1.5 4 4 4-4-1.5-1.5-2.5 2.5-2.5-2.5z" transform="translate(0 1)" />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="12px"
+          height="12px"
+          viewBox="0 0 10 10"
+          style="fill: currentColor"
+        >
+          <path
+            d="M1.5 0l-1.5 1.5 4 4 4-4-1.5-1.5-2.5 2.5-2.5-2.5z"
+            transform="translate(0 1)"
+          />
         </svg>
       </i>
       <i class="svg-icon svg-icon-chevron svg-icon-chevron-up pull-right">
-        <svg xmlns="http://www.w3.org/2000/svg" width="12px" height="12px" viewBox="0 0 10 10" style="fill: currentColor">
-          <path d="M4 0l-4 4 1.5 1.5 2.5-2.5 2.5 2.5 1.5-1.5-4-4z" transform="translate(0 1)" />
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="12px"
+          height="12px"
+          viewBox="0 0 10 10"
+          style="fill: currentColor"
+        >
+          <path
+            d="M4 0l-4 4 1.5 1.5 2.5-2.5 2.5 2.5 1.5-1.5-4-4z"
+            transform="translate(0 1)"
+          />
         </svg>
       </i>
       Call:
-      {{#isEqual 'Unknown' (getUserInfo this @root.users 'contacts.call') }}
-        {% endraw %}
-          {{missing_number_note|safe}}
-        {% raw %}
+      {{#isEqual "Unknown" (getUserInfo this @root.users "contacts.call")}}
+        No number
       {{else}}
-        <a href="tel:{{getUserInfo this @root.users 'contacts.call'}}"> {{getUserInfo this @root.users 'contacts.call'}} </a>
+        <a href="tel:{{getUserInfo this @root.users 'contacts.call'}}">
+          {{getUserInfo this @root.users "contacts.call"}}
+        </a>
       {{/isEqual}}
       <ul class="card-inner-extra">
         <li>
           SMS:
-          {{#isEqual 'Unknown' (getUserInfo this @root.users 'contacts.sms') }}
-            {% endraw %}
-              {{missing_number_note|safe}}
-            {% raw %}
+          {{#isEqual "Unknown" (getUserInfo this @root.users "contacts.sms")}}
+            No number
           {{else}}
-            <a href="tel:{{getUserInfo this @root.users 'contacts.sms'}}"> {{getUserInfo this @root.users 'contacts.sms'}} </a>
+            <a href="tel:{{getUserInfo this @root.users 'contacts.sms'}}">
+              {{getUserInfo this @root.users "contacts.sms"}}
+            </a>
           {{/isEqual}}
         </li>
-        <li> Slack: <a>{{getUserInfo this @root.users 'contacts.slack'}}</a> </li>
-        <li> E-Mail: <a target="_blank" href="mailto:{{getUserInfo this @root.users 'contacts.email'}}"> {{getUserInfo this @root.users 'contacts.email'}} </a> </li>
+        <li>
+          Slack:
+          <a>{{getUserInfo this @root.users "contacts.slack"}}</a>
+        </li>
+        <li>
+          E-Mail:
+          <a
+            target="_blank"
+            href="mailto:{{getUserInfo this @root.users 'contacts.email'}}"
+          > {{getUserInfo this @root.users "contacts.email"}} </a>
+        </li>
       </ul>
     </div>
   </li>
@@ -1489,20 +1524,66 @@
 <script id="card-inner-template" type="text/x-handlebars-template">
   {{#if newItem}}
     <li class="card-inner border-bottom" data-card-name="{{user.name}}">
-      <img class="card-picture" src="{{defaultPhoto user.photo_url}}" alt="{{user.name}}">
+      <img
+        class="card-picture"
+        src="{{defaultPhoto user.photo_url}}"
+        alt="{{user.name}}"
+      />
       <strong class="card-inner-user"> {{user.full_name}} </strong>
       {{#unless admin}}
-        <button class="badge toggle-rotation pull-right" data-in-rotation="true"> <span class="active-text">In Rotation</span> <span class="inactive-text">Out Of Rotation</span> </button>
+        <button
+          class="badge toggle-rotation pull-right"
+          data-in-rotation="true"
+        >
+          <span class="active-text">In Rotation</span>
+          <span class="inactive-text">Out Of Rotation</span>
+        </button>
       {{/unless}}
       <ul class="border-top card-content">
-        <li> <a target="_blank" href="mailto:{{user.contacts.email}}"> {{user.contacts.email}} </a> </li>
-        <li> <span class="light"> Call </span> {{#if user.contacts.call}} <a href="tel:{{user.contacts.call}}" target="_blank"> {{user.contacts.call}} </a> {{else}} <span class="error-text">No number found!</span> {{/if}} </li>
-        <li> <span class="light"> SMS </span> {{#if user.contacts.sms}} <a href="tel:{{user.contacts.sms}}" target="_blank"> {{user.contacts.sms}} </a> {{else}} <span class="error-text">No number found!</span> {{/if}} </li>
-        <li> <span class="light"> Slack </span> <a> {{user.contacts.slack}} </a> </li>
-        <span class="close remove-card-item" data-admin-action="true" data-toggle="modal" data-target="#confirm-action-modal" data-modal-action="oncall.team.info.removeCardItem" data-modal-title="Remove {{user.full_name}}" data-modal-content="Delete {{user.full_name}} from roster?">
+        <li>
+          <a target="_blank" href="mailto:{{user.contacts.email}}">
+            {{user.contacts.email}}
+          </a>
+        </li>
+        <li>
+          <span class="light"> Call </span>
+          {{#if user.contacts.call}}
+            <a href="tel:{{user.contacts.call}}" target="_blank">
+              {{user.contacts.call}}
+            </a>
+          {{else}} <span class="error-text">No number found!</span> {{/if}}
+        </li>
+        <li>
+          <span class="light"> SMS </span>
+          {{#if user.contacts.sms}}
+            <a href="tel:{{user.contacts.sms}}" target="_blank">
+              {{user.contacts.sms}}
+            </a>
+          {{else}} <span class="error-text">No number found!</span> {{/if}}
+        </li>
+        <li>
+          <span class="light"> Slack </span>
+          <a> {{user.contacts.slack}} </a>
+        </li>
+        <span
+          class="close remove-card-item"
+          data-admin-action="true"
+          data-toggle="modal"
+          data-target="#confirm-action-modal"
+          data-modal-action="oncall.team.info.removeCardItem"
+          data-modal-title="Remove {{user.full_name}}"
+          data-modal-content="Delete {{user.full_name}} from roster?"
+        >
           <i class="svg-icon svg-icon-trash">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 8 8">
-              <path d="M3 0c-.55 0-1 .45-1 1h-1c-.55 0-1 .45-1 1h7c0-.55-.45-1-1-1h-1c0-.55-.45-1-1-1h-1zm-2 3v4.81c0 .11.08.19.19.19h4.63c.11 0 .19-.08.19-.19v-4.81h-1v3.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5v-3.5h-1v3.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5v-3.5h-1z" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14px"
+              height="14px"
+              viewBox="0 0 8 8"
+            >
+              <path
+                d="M3 0c-.55 0-1 .45-1 1h-1c-.55 0-1 .45-1 1h7c0-.55-.45-1-1-1h-1c0-.55-.45-1-1-1h-1zm-2 3v4.81c0 .11.08.19.19.19h4.63c.11 0 .19-.08.19-.19v-4.81h-1v3.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5v-3.5h-1v3.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5v-3.5h-1z"
+              />
             </svg>
           </i>
         </span>
@@ -1510,38 +1591,76 @@
     </li>
   {{else}}
     <li class="card-inner border-bottom" data-card-name="{{this.name}}">
-      <img class="card-picture" src="{{getUserInfo this @root.users 'photo_url'}}" alt="{{getUserInfo this @root.users 'full_name'}}">
-      <strong class="card-inner-user"> {{getUserInfo this @root.users 'full_name'}} </strong>
+      <img
+        class="card-picture"
+        src="{{getUserInfo this @root.users 'photo_url'}}"
+        alt="{{getUserInfo this @root.users 'full_name'}}"
+      />
+      <strong class="card-inner-user">
+        {{getUserInfo this @root.users "full_name"}}
+      </strong>
       {{#ifExists this.in_rotation}}
-        <button class="badge toggle-rotation pull-right" data-in-rotation="{{this.in_rotation}}"> <span class="active-text">In Rotation</span> <span class="inactive-text">Out Of Rotation</span> </button>
+        <button
+          class="badge toggle-rotation pull-right"
+          data-in-rotation="{{this.in_rotation}}"
+        >
+          <span class="active-text">In Rotation</span>
+          <span class="inactive-text">Out Of Rotation</span>
+        </button>
       {{/ifExists}}
       <ul class="border-top card-content">
-        <li> <a target="_blank" href="mailto:{{getUserInfo this @root.users 'contacts.email'}}"> {{getUserInfo this @root.users 'contacts.email'}} </a> </li>
+        <li>
+          <a
+            target="_blank"
+            href="mailto:{{getUserInfo this @root.users 'contacts.email'}}"
+          > {{getUserInfo this @root.users "contacts.email"}} </a>
+        </li>
         <li>
           <span class="light"> Call </span>
-          {{#isEqual 'Unknown' (getUserInfo this @root.users 'contacts.call') }}
-            {% endraw %}
-              {{missing_number_note|safe}}
-            {% raw %}
+          {{#isEqual "Unknown" (getUserInfo this @root.users "contacts.call")}}
+            No number
           {{else}}
-            <a href="tel:{{getUserInfo this @root.users 'contacts.call'}}"> {{getUserInfo this @root.users 'contacts.call'}} </a>
+            <a href="tel:{{getUserInfo this @root.users 'contacts.call'}}">
+              {{getUserInfo this @root.users "contacts.call"}}
+            </a>
           {{/isEqual}}
         </li>
         <li>
           <span class="light"> SMS </span>
-          {{#isEqual 'Unknown' (getUserInfo this @root.users 'contacts.sms') }}
-            {% endraw %}
-              {{missing_number_note|safe}}
-            {% raw %}
+          {{#isEqual "Unknown" (getUserInfo this @root.users "contacts.sms")}}
+            No number
           {{else}}
-            <a href="tel:{{getUserInfo this @root.users 'contacts.sms'}}"> {{getUserInfo this @root.users 'contacts.sms'}} </a>
+            <a href="tel:{{getUserInfo this @root.users 'contacts.sms'}}">
+              {{getUserInfo this @root.users "contacts.sms"}}
+            </a>
           {{/isEqual}}
         </li>
-        <li> <span class="light"> Slack </span> <a> {{getUserInfo this @root.users 'contacts.slack'}} </a></li>
-        <span class="close remove-card-item" data-admin-action="true" data-toggle="modal" data-target="#confirm-action-modal" data-modal-action="oncall.team.info.removeCardItem" data-modal-title="Remove {{getUserInfo this @root.users 'full_name'}}" data-modal-content="Delete {{getUserInfo this @root.users 'full_name'}} from roster?">
+        <li>
+          <span class="light"> Slack </span>
+          <a> {{getUserInfo this @root.users "contacts.slack"}} </a></li>
+        <span
+          class="close remove-card-item"
+          data-admin-action="true"
+          data-toggle="modal"
+          data-target="#confirm-action-modal"
+          data-modal-action="oncall.team.info.removeCardItem"
+          data-modal-title="Remove {{getUserInfo this @root.users 'full_name'}}"
+          data-modal-content="Delete {{getUserInfo
+            this
+            @root.users
+            'full_name'
+          }} from roster?"
+        >
           <i class="svg-icon svg-icon-trash">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14px" height="14px" viewBox="0 0 8 8">
-              <path d="M3 0c-.55 0-1 .45-1 1h-1c-.55 0-1 .45-1 1h7c0-.55-.45-1-1-1h-1c0-.55-.45-1-1-1h-1zm-2 3v4.81c0 .11.08.19.19.19h4.63c.11 0 .19-.08.19-.19v-4.81h-1v3.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5v-3.5h-1v3.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5v-3.5h-1z" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14px"
+              height="14px"
+              viewBox="0 0 8 8"
+            >
+              <path
+                d="M3 0c-.55 0-1 .45-1 1h-1c-.55 0-1 .45-1 1h7c0-.55-.45-1-1-1h-1c0-.55-.45-1-1-1h-1zm-2 3v4.81c0 .11.08.19.19.19h4.63c.11 0 .19-.08.19-.19v-4.81h-1v3.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5v-3.5h-1v3.5c0 .28-.22.5-.5.5s-.5-.22-.5-.5v-3.5h-1z"
+              />
             </svg>
           </i>
         </span>

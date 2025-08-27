@@ -99,7 +99,6 @@ def index(req, resp):
         resp.text = jinja2_env.get_template('index.html').render(
             user=user,
             slack_instance=SLACK_INSTANCE,
-            missing_number_note=INDEX_CONTENT_SETTING['missing_number_note'],
             header_color=HEADER_COLOR,
             iris_plan_settings=IRIS_PLAN_SETTINGS,
             public_calendar_base_url=PUBLIC_CALENDAR_BASE_URL,

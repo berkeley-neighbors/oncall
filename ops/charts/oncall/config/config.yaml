@@ -131,8 +131,6 @@ index_content_setting:
   #    <li>Feedback</li>
   #    <li><a href="http://oncall.tools" target="_blank">About</a></li>
   #  </ul>
-  # Note displayed when a user has no phone number
-  missing_number_note: 'No number'
 header_color: '#3a3a3a'
 
 # The base url for the public oncall calendar. This url has to open to the public internet for most web calendar subscriptions to work.
