@@ -72,7 +72,6 @@ SLACK_INSTANCE = None
 HEADER_COLOR = None
 IRIS_PLAN_SETTINGS = None
 USERCONTACT_UI_READONLY = None
-LOGIN_REQUIRED = None
 TEAM_MANAGED_MESSAGE = None
 SYNOLOGY_APP_ID = None
 SYNOLOGY_REDIRECT_URI = None
@@ -88,7 +87,7 @@ def index(req, resp):
     if not user:
         user = req.env.get('beaker.session', {}).get('user')
 
-    if user is None and LOGIN_REQUIRED:
+    if user is None:
         resp.content_type = 'text/html'
         resp.text = jinja2_env.get_template('loginsplash.html').render(
             synology_sdk_url=SYNOLOGY_SDK_URL,
@@ -158,7 +157,6 @@ def init(application, config):
     global USERCONTACT_UI_READONLY
     global PUBLIC_CALENDAR_BASE_URL
     global PUBLIC_CALENDAR_ADDITIONAL_MESSAGE
-    global LOGIN_REQUIRED
     global TEAM_MANAGED_MESSAGE
     global SYNOLOGY_SDK_URL
     global SYNOLOGY_OAUTH_URL
@@ -177,7 +175,6 @@ def init(application, config):
     SYNOLOGY_REDIRECT_URI = environ.get('SYNOLOGY_REDIRECT_URI')
 
     PUBLIC_CALENDAR_ADDITIONAL_MESSAGE = config.get('public_calendar_additional_message')
-    LOGIN_REQUIRED = config.get('require_auth')
     TEAM_MANAGED_MESSAGE = config.get('team_managed_message')
 
     application.add_sink(index, '/')
