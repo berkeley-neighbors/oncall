@@ -64,7 +64,6 @@ mimes = {
 
 
 INDEX_CONTENT_SETTING = {
-    'user_setting_note': '',
     'footer': '<ul><li>Oncall © LinkedIn %s</li><li><a href="http://oncall.tools" target="_blank">About</a></li></ul>' % date.today().year,
 }
 
@@ -100,7 +99,6 @@ def index(req, resp):
         resp.text = jinja2_env.get_template('index.html').render(
             user=user,
             slack_instance=SLACK_INSTANCE,
-            user_setting_note=INDEX_CONTENT_SETTING['user_setting_note'],
             missing_number_note=INDEX_CONTENT_SETTING['missing_number_note'],
             header_color=HEADER_COLOR,
             iris_plan_settings=IRIS_PLAN_SETTINGS,

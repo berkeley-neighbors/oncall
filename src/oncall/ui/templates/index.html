@@ -1608,53 +1608,50 @@
 *********************** //-->
 
 <script id="settings-template" type="text/x-handlebars-template">
-    <div class="subheader-wrapper">
-      {{>settings-subheader username=name page="settings"}}
-    </div>
-    <div class="main container-fluid">
-  {% endraw %}
-      {{user_setting_note|safe}}
-  {% raw %}
-      <form class="module clearfix" id="user-settings-form">
-        <table width="100%">
-          <tr>
-            <td>Profile Picture</td>
-            <td>
-              <span class="profile-picture">
-                <img class="headshot" src="{{defaultPhoto photo_url}}" alt="{{name}}">
-              </span>
-            </td>
-          </tr>
-          <tr>
-            <td>Name</td>
-            <td>
-              <span>{{full_name}}</span>
-            </td>
-          </tr>
-          <tr>
-            <td>Display Timezone</td>
-            <td>
-              <select class="form-control" name="time_zone">
-                {{#each timezones}}
-                  <option value="{{this}}" {{isSelected ../time_zone this}}>{{this}}</option>
-                {{/each}}
-              </select>
-            </td>
-          </tr>
-          {{#each contactmodes}}
-          <tr>
-            <td>{{label}}</td>
-            <td>
-              <span>
-                <input type="text" name="contactmode-{{mode}}" id="{{mode}}" class="form-control" value="{{value}}" />
-              </span>
-            </td>
-          </tr>
-          {{/each}}
-        </table>
-        <button type="submit" id="save-settings" class="btn btn-primary btn-sm pull-right"><span class="btn-text">Save Changes</span> <i class="loader loader-small"></i></button>
-      </form>
-    </div>
+  <div class="subheader-wrapper">
+    {{>settings-subheader username=name page="settings"}}
+  </div>
+  <div class="main container-fluid">
+    <form class="module clearfix" id="user-settings-form">
+      <table width="100%">
+        <tr>
+          <td>Profile Picture</td>
+          <td>
+            <span class="profile-picture">
+              <img class="headshot" src="{{defaultPhoto photo_url}}" alt="{{name}}">
+            </span>
+          </td>
+        </tr>
+        <tr>
+          <td>Name</td>
+          <td>
+            <span>{{full_name}}</span>
+          </td>
+        </tr>
+        <tr>
+          <td>Display Timezone</td>
+          <td>
+            <select class="form-control" name="time_zone">
+              {{#each timezones}}
+                <option value="{{this}}" {{isSelected ../time_zone this}}>{{this}}</option>
+              {{/each}}
+            </select>
+          </td>
+        </tr>
+        {{#each contactmodes}}
+        <tr>
+          <td>{{label}}</td>
+          <td>
+            <span>
+              <input type="text" name="contactmode-{{mode}}" id="{{mode}}" class="form-control" value="{{value}}" />
+            </span>
+          </td>
+        </tr>
+        {{/each}}
+      </table>
+      <button type="submit" id="save-settings" class="btn btn-primary btn-sm pull-right"><span class="btn-text">Save Changes</span> <i class="loader loader-small"></i></button>
+    </form>
+  </div>
 </script>
 
 <!--// **********************
