@@ -3,7 +3,15 @@
 
 from ... import db
 from ujson import dumps as json_dumps
+from os import environ
 
+mode_to_name = {
+    'email': 'Email',
+    'sms': 'SMS',
+    'call': 'Phone Call',
+    'slack': 'Slack',
+    'teams_messenger': 'Teams Messenger'
+}
 
 def on_get(req, resp):
     """
@@ -12,7 +20,8 @@ def on_get(req, resp):
     connection = db.connect()
     cursor = connection.cursor()
     cursor.execute('SELECT `name` FROM `contact_mode`')
-    data = [row[0] for row in cursor]
+    supported_modes = ' '.join(environ.get('SUPPORTED_MODES').split(','))
+    data = [row[0] for row in cursor if row[0] in supported_modes]
     cursor.close()
     connection.close()
-    resp.body = json_dumps(data)
+    resp.body = json_dumps([{'mode': item, 'name': mode_to_name[item]} for item in data])

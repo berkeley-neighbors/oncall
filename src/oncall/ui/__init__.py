@@ -7,7 +7,7 @@
 
 import logging
 import re
-from ..constants import SUPPORTED_TIMEZONES
+from ..constants import SUPPORTED_TIMEZONES, SUPPORTED_MODES
 from .. import auth
 from os import path, environ
 from falcon import HTTPNotFound
@@ -102,6 +102,7 @@ def index(req, resp):
             public_calendar_additional_message=PUBLIC_CALENDAR_ADDITIONAL_MESSAGE,
             footer=FOOTER_CONTENT,
             timezones=SUPPORTED_TIMEZONES,
+            modes=SUPPORTED_MODES,
             team_managed_message=TEAM_MANAGED_MESSAGE
         )
 

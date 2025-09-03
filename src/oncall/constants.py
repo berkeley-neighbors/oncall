@@ -39,15 +39,18 @@ GRACE_PERIOD = None
 
 SUPPORTED_TIMEZONES = None
 
+SUPPORTED_MODES = None
 
-def init(config):
+def init(config, environ):
     global DEFAULT_ROLES
     global DEFAULT_MODES
     global DEFAULT_TIMES
     global SUPPORTED_TIMEZONES
+    global SUPPORTED_MODES
     global GRACE_PERIOD
     DEFAULT_ROLES = config['notifications']['default_roles']
     DEFAULT_MODES = config['notifications']['default_modes']
     DEFAULT_TIMES = config['notifications']['default_times']
     SUPPORTED_TIMEZONES = config['supported_timezones']
+    SUPPORTED_MODES = environ.get('SUPPORTED_MODES')
     GRACE_PERIOD = config.get('grace_period', 86400)

@@ -144,7 +144,7 @@ class RawPathPatcher(object):
 
 def init(config):
     db.init(config['db'])
-    constants.init(config)
+    constants.init(config, environ)
     if 'iris_plan_integration' in config:
         iris.init(config['iris_plan_integration'])
 

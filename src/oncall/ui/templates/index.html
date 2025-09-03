@@ -319,11 +319,17 @@
           src="{{defaultPhoto data.current.primary.0.photo_url}}"
           alt="{{data.current.primary.0.full_name}}"
         />
-        <h4><strong><a
-              class="landing-teams-name"
-              target="_blank"
-              href="mailto:{{data.current.primary.0.user_contacts.email}}"
-            >{{data.current.primary.0.full_name}}</a></strong>
+        <h4><strong>
+            {{#if data.current.primary.0.user_contacts.email}}
+              <a
+                class="landing-teams-name"
+                target="_blank"
+                href="mailto:{{data.current.primary.0.user_contacts.email}}"
+              >{{data.current.primary.0.full_name}}</a>
+            {{else}}
+              {{data.current.primary.0.full_name}}
+            {{/if}}
+          </strong>
           <span
             class="badge pull-right"
             data-role="{{data.current.primary.0.role}}"
@@ -362,7 +368,8 @@
           <h3>
             {{name}}
             <span class="edit-team-name">
-              <i class="svg-icon svg-icon-pencil" data-toggle="modal" data-target="#team-edit-modal" data-modal-action="oncall.team.updateTeamName" data-modal-title="Update Team Info" data-modal-name="{{#if name}}{{name}}{{else}}{{@key}}{{/if}}" data-modal-email="{{email}}" data-modal-slack="{{slack_channel}}" data-modal-slack-notifications="{{slack_channel_notifications}}" data-modal-timezone="{{scheduling_timezone}}" data-modal-description="{{description}}" data-modal-irisplan="{{iris_plan}}" data-modal-iris-enabled="{{iris_enabled}}" data-modal-override-phone="{{override_phone_number}}" info-admin-action="true">
+              <i class="svg-icon svg-icon-pencil" data-toggle="modal" data-target="#team-edit-modal" data-modal-action="oncall.team.updateTeamName" data-modal-title="Update Team Info" data-modal-name="{{#if name}}{{name}}{{else}}{{@key}}{{/if}}" data-modal-email="{{email}}" data-modal-slack="{{slack_channel}}" data-modal-slack-notifications="{{slack_channel_notifications}}" data-modal-timezone="{{scheduling_timezone}}" data-modal-description="{{description}}" data-modal-irisplan="{{iris_plan}}" data-modal-iris-enabled="{{iris_enabled}}" data-modal-override-phone="{{override_phone_number}}"
+              data-modal-modes="{{modes}}" info-admin-action="true">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 8 8" style="fill: currentColor">
                   <path d="M6 0l-1 1 2 2 1-1-2-2zm-2 2l-4 4v2h2l4-4-2-2z" />
                 </svg>
@@ -611,10 +618,14 @@
             </a>
           {{/isEqual}}
         </li>
-        <li>
-          Slack:
-          <a>{{getUserInfo this @root.users "contacts.slack"}}</a>
-        </li>
+        {{#isEqual
+          "Unknown" (getUserInfo this @root.users "contacts.slack")
+        }}{{else}}
+          <li>
+            Slack:
+            <a>{{getUserInfo this @root.users "contacts.slack"}}</a>
+          </li>
+        {{/isEqual}}
         <li>
           E-Mail:
           <a
@@ -673,7 +684,11 @@
             <ul class="card-inner-extra light small">
               <li> Call: {{#if user_contacts.call}} <a href="tel:{{user_contacts.call}}"> {{user_contacts.call}} </a> {{else}} <span class="error-text">No number found!</span> {{/if}} </li>
               <li> SMS: {{#if user_contacts.sms}} <a href="tel:{{user_contacts.sms}}"> {{user_contacts.sms}} </a> {{else}} <span class="error-text">No number found!</span> {{/if}} </li>
-              <li> Slack: <a>{{user_contacts.slack}}</a> </li>
+
+              {{#if user_contacts.slack}}
+                <li> Slack: <a>{{user_contacts.slack}}</a> </li>
+              {{/if}}
+
               <li> E-Mail: <a target="_blank" href="mailto:{{user_contacts.email}}"> {{user_contacts.email}} </a> </li>
             </ul>
             <ul class="border-top card-content">
@@ -1561,10 +1576,12 @@
             </a>
           {{else}} <span class="error-text">No number found!</span> {{/if}}
         </li>
-        <li>
-          <span class="light"> Slack </span>
-          <a> {{user.contacts.slack}} </a>
-        </li>
+        {{#if user.contacts.slack}}
+          <li>
+            <span class="light"> Slack </span>
+            <a> {{user.contacts.slack}} </a>
+          </li>
+        {{/if}}
         <span
           class="close remove-card-item"
           data-admin-action="true"
@@ -1635,9 +1652,14 @@
             </a>
           {{/isEqual}}
         </li>
-        <li>
-          <span class="light"> Slack </span>
-          <a> {{getUserInfo this @root.users "contacts.slack"}} </a></li>
+        {{#isEqual
+          "Unknown" (getUserInfo this @root.users "contacts.slack")
+        }}{{else}}
+          <li>
+            <span class="light"> Slack </span>
+            <a> {{getUserInfo this @root.users "contacts.slack"}} </a>
+          </li>
+        {{/isEqual}}
         <span
           class="close remove-card-item"
           data-admin-action="true"
@@ -1880,91 +1902,95 @@
       </h4>
     </div>
     <div class="notification-create-body">
-      {{#isEqual createType 'reminder'}}
-        Remind me via
-        <select class="form-control notification-create-mode" name="mode">
-          {{#each modes}}
-          <option value="{{this}}" {{isSelected this ../selected.mode}}>{{this}}</option>
-          {{/each}}
-        </select>
-        <input type="number" min="1" class="form-control notification-create-time" value="{{#ifExists selected.time_before}}{{scaleSeconds selected.time_before 'duration'}}{{/ifExists}}" name="time_before">
-        <select name="time_before_unit" class="form-control notification-create-unit">
-          <option value="minutes" {{isSelected (scaleSeconds selected.time_before 'unit') "minutes"}}>Minutes</option>
-          <option value="hours" {{isSelected (scaleSeconds selected.time_before 'unit') "hours"}}>Hours</option>
-          <option value="days"  {{isSelected (scaleSeconds selected.time_before 'unit') "days"}} {{#unless selected.time_before}}selected{{/unless}}>Days</option>
-          <option value="weeks" {{isSelected (scaleSeconds selected.time_before 'unit') "weeks"}}>Weeks</option>
-        </select>
-        before my
-        <span class="multi-select notification-create-role">
-          <select class="form-control multi-select-initial">
-            <option>Roles</option>
-          </select>
-          <div class="multi-select-overlay"></div>
-          <ul class="multi-select-options">
-            {{#each roles}}
-            <li>
-              <input type="checkbox" value="{{this.name}}"
-                     id="reminder-create-{{this.name}}-{{../selected.id}}"
-                     {{isCheckedMulti this.name ../selected.roles}}>
-              <label for="reminder-create-{{this.name}}-{{../selected.id}}">{{this.name}}</label>
-            </li>
+      {{# ifNotEmpty teams}}
+        {{#isEqual createType 'reminder'}}
+          Remind me via
+          <select class="form-control notification-create-mode" name="mode">
+            {{#each modes}}
+            <option value="{{this.mode}}" {{isSelected this.mode ../selected.mode}}>{{this.name}}</option>
             {{/each}}
-          </ul>
-        </span>
-        shift
-        <select class="form-control notification-create-type" name="type">
-          {{#each types}}
-            {{#isEqual is_reminder 1}}
-            <option value="{{name}}" {{isSelected name ../../selected.type}}>{{display}}</option>
-            {{/isEqual}}
-          {{/each}}
-        </select>
-        for
-        <select class="form-control notification-create-team" name="team">
-          {{#each teams}}
-          <option value="{{this}}" {{isSelected this ../selected.team}}>{{this}}</option>
-          {{/each}}
-        </select>
+          </select>
+          <input type="number" min="1" class="form-control notification-create-time" value="{{#ifExists selected.time_before}}{{scaleSeconds selected.time_before 'duration'}}{{/ifExists}}" name="time_before">
+          <select name="time_before_unit" class="form-control notification-create-unit">
+            <option value="minutes" {{isSelected (scaleSeconds selected.time_before 'unit') "minutes"}}>Minutes</option>
+            <option value="hours" {{isSelected (scaleSeconds selected.time_before 'unit') "hours"}}>Hours</option>
+            <option value="days"  {{isSelected (scaleSeconds selected.time_before 'unit') "days"}} {{#unless selected.time_before}}selected{{/unless}}>Days</option>
+            <option value="weeks" {{isSelected (scaleSeconds selected.time_before 'unit') "weeks"}}>Weeks</option>
+          </select>
+          before my
+          <span class="multi-select notification-create-role">
+            <select class="form-control multi-select-initial">
+              <option>Roles</option>
+            </select>
+            <div class="multi-select-overlay"></div>
+            <ul class="multi-select-options">
+              {{#each roles}}
+              <li>
+                <input type="checkbox" value="{{this.name}}"
+                      id="reminder-create-{{this.name}}-{{../selected.id}}"
+                      {{isCheckedMulti this.name ../selected.roles}}>
+                <label for="reminder-create-{{this.name}}-{{../selected.id}}">{{this.name}}</label>
+              </li>
+              {{/each}}
+            </ul>
+          </span>
+          shift
+          <select class="form-control notification-create-type" name="type">
+            {{#each types}}
+              {{#isEqual is_reminder 1}}
+              <option value="{{name}}" {{isSelected name ../../selected.type}}>{{display}}</option>
+              {{/isEqual}}
+            {{/each}}
+          </select>
+          for
+          <select class="form-control notification-create-team" name="team">
+            {{#each teams}}
+            <option value="{{this}}" {{isSelected this ../selected.team}}>{{this}}</option>
+            {{/each}}
+          </select>
+        {{else}}
+          Notify me via
+          <select class="form-control notification-create-mode" name="mode">
+            {{#each modes}}
+            <option value="{{this.mode}}" {{isSelected this.mode ../selected.mode}}>{{this.name}}</option>
+            {{/each}}
+          </select>
+          when a
+          <span class="multi-select notification-create-role">
+            <select class="form-control multi-select-initial">
+              <option>Roles</option>
+            </select>
+            <div class="multi-select-overlay"></div>
+            <ul class="multi-select-options">
+              {{#each roles}}
+              <li>
+                <input type="checkbox" value="{{this.name}}"
+                      id="notification-create-{{this.name}}-{{../selected.id}}"
+                      {{isCheckedMulti this.name ../selected.roles}}>
+                <label for="notification-create-{{this.name}}-{{../selected.id}}">{{this.name}}</label>
+              </li>
+              {{/each}}
+            </ul>
+          </span>
+          event is
+          <select class="form-control notification-create-type" name="type">
+            {{#each types}}
+              {{#isEqual is_reminder 0}}
+              <option value="{{name}}" {{isSelected name ../selected.type}}>{{display}}</option>
+              {{/isEqual}}
+            {{/each}}
+          </select>
+          on the
+          <select class="form-control notification-create-team" name="team">
+            {{#each teams}}
+            <option value="{{this}}" {{isSelected this ../selected.team}}>{{this}}</option>
+            {{/each}}
+          </select>
+          calendar <b>if I am involved.</b>
+        {{/isEqual}}
       {{else}}
-        Notify me via
-        <select class="form-control notification-create-mode" name="mode">
-          {{#each modes}}
-          <option value="{{this}}" {{isSelected this ../selected.mode}}>{{this}}</option>
-          {{/each}}
-        </select>
-        when a
-        <span class="multi-select notification-create-role">
-          <select class="form-control multi-select-initial">
-            <option>Roles</option>
-          </select>
-          <div class="multi-select-overlay"></div>
-          <ul class="multi-select-options">
-            {{#each roles}}
-            <li>
-              <input type="checkbox" value="{{this.name}}"
-                     id="notification-create-{{this.name}}-{{../selected.id}}"
-                     {{isCheckedMulti this.name ../selected.roles}}>
-              <label for="notification-create-{{this.name}}-{{../selected.id}}">{{this.name}}</label>
-            </li>
-            {{/each}}
-          </ul>
-        </span>
-        event is
-        <select class="form-control notification-create-type" name="type">
-          {{#each types}}
-            {{#isEqual is_reminder 0}}
-            <option value="{{name}}" {{isSelected name ../selected.type}}>{{display}}</option>
-            {{/isEqual}}
-          {{/each}}
-        </select>
-        on the
-        <select class="form-control notification-create-team" name="team">
-          {{#each teams}}
-          <option value="{{this}}" {{isSelected this ../selected.team}}>{{this}}</option>
-          {{/each}}
-        </select>
-        calendar <b>if I am involved.</b>
-      {{/isEqual}}
+        <p>You must join a team first!</p>
+      {{/ifNotEmpty}}
     </div>
     <div class="border-top notification-actions clearfix">
       <div class="pull-right">
