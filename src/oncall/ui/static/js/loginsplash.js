@@ -1,6 +1,7 @@
 var oncallSplash = {
   data: {
     $loginForm: $("#login-form"),
+    $synologySsoLogin: $("#synology-sso-login"),
     loginUrl: "/login",
     csrfKey: "csrf-key",
   },
@@ -37,7 +38,11 @@ var oncallSplash = {
         alert("Invalid username or password.");
       });
   },
+  synoLogin: function () {
+    SYNOSSO.login();
+  },
   events: function () {
+    this.data.$synologySsoLogin.on("click", this.synoLogin.bind(this));
     this.data.$loginForm.on("submit", this.login.bind(this));
   },
 };
