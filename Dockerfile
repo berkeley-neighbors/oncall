@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::=--force-confold dist-upgrade \
     && DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::=--force-confold install libffi-dev libsasl2-dev python3-dev \
