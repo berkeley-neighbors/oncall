@@ -4,16 +4,19 @@ from urllib.parse import unquote_plus
 from importlib import import_module
 
 import falcon
-import os
+from os import environ
 import re
 from beaker.middleware import SessionMiddleware
 from falcon_cors import CORS
+import secrets
 
 from . import db, constants, iris, auth
 
 import logging
+
 logger = logging.getLogger('oncall.app')
 
+ALLOW_ORIGINS_LIST = ' '.join(environ.get("ALLOW_ORIGINS_LIST").split(','))
 security_headers = [
     ('X-Frame-Options', 'SAMEORIGIN'),
     ('X-Content-Type-Options', 'nosniff'),
@@ -21,16 +24,28 @@ security_headers = [
     ('Strict-Transport-Security', 'max-age=31536000; includeSubDomains'),
 ]
 
-
 def json_error_serializer(req, resp, exception):
     resp.body = exception.to_json()
     resp.content_type = 'application/json'
 
 
 class SecurityHeaderMiddleware(object):
-    def process_request(self, req, resp):
-        resp.set_headers(security_headers)
+    def __init__(self, config):
+        self.config = config
 
+    def process_request(self, req, resp):
+        nonce = secrets.token_urlsafe(16)
+        req.context['nonce'] = nonce
+        security_headers.append(
+            ("Content-Security-Policy",
+             # unsafe-eval is required for handlebars without precompiled templates
+             "default-src 'self' 'unsafe-eval' ; "
+             "font-src 'self' data: blob; img-src data: uri https: http:; "
+             "script-src 'unsafe-eval' 'self' %s '%s'; "
+             "style-src 'unsafe-inline' https: http:;" %
+             (ALLOW_ORIGINS_LIST, f'nonce-{nonce}')))
+        
+        resp.set_headers(security_headers)
 
 class ReqBodyMiddleware(object):
     '''
@@ -63,11 +78,18 @@ class AuthMiddleware(object):
 application = None
 
 
+def generic_error_handler(req, resp, ex, params, ws=None):
+    logger.error("Error occurred: %s", ex)
+    resp.status = falcon.HTTP_500
+    resp.body = {"error": str(ex)}
+
+
 def init_falcon_api(config):
+    logger.info("Initializing Falcon API")
     global application
-    cors = CORS(allow_origins_list=config.get('allow_origins_list', []))
+    cors = CORS(allow_origins_list=ALLOW_ORIGINS_LIST)
     middlewares = [
-        SecurityHeaderMiddleware(),
+        SecurityHeaderMiddleware(config),
         ReqBodyMiddleware(),
         cors.middleware
     ]
@@ -77,8 +99,10 @@ def init_falcon_api(config):
     application.req_options.auto_parse_form_urlencoded = False
     application.set_error_serializer(json_error_serializer)
     application.req_options.strip_url_path_trailing_slash = True
+    application.add_error_handler(Exception, generic_error_handler)
+
     from .auth import init as init_auth
-    init_auth(application, config['auth'])
+    init_auth(application, config)
 
     from .ui import init as init_ui
     init_ui(application, config)
@@ -126,13 +150,6 @@ def init(config):
         iris.init(config['iris_plan_integration'])
 
     if not config.get('debug', False):
-        security_headers.append(
-            ("Content-Security-Policy",
-             # unsafe-eval is required for handlebars without precompiled templates
-             "default-src 'self' %s 'unsafe-eval' ; "
-             "font-src 'self' data: blob; img-src data: uri https: http:; "
-             "style-src 'unsafe-inline' https: http:;" %
-             os.environ.get("IRIS_API_HOST", config.get('iris_plan_integration', {}).get('api_host', ''))))
         logging.basicConfig(level=logging.INFO)
         logger.info('%s', security_headers)
     else:
@@ -145,11 +162,12 @@ def init(config):
         'session.type': 'cookie',
         'session.cookie_expires': True,
         'session.key': 'oncall-auth',
-        'session.encrypt_key': config['session']['encrypt_key'],
-        'session.validate_key': config['session']['sign_key'],
-        'session.secure': not (config.get('debug', False) or config.get('allow_http', False)),
+        'session.encrypt_key': environ.get('SESSION_ENCRYPT_KEY'),
+        'session.validate_key': environ.get('SESSION_VALIDATE_KEY'),
+        'session.secure': environ.get('ALLOW_HTTP', False),
         'session.httponly': True,
-        'session.crypto_type': 'cryptography'
+        'session.crypto_type': 'cryptography',
+        'session.domain': environ.get('HOST'),
     }
     application = SessionMiddleware(application, session_opts)
     application = RawPathPatcher(application)

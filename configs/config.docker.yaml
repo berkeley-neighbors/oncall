@@ -1,7 +1,7 @@
 server:
   host: 0.0.0.0
   port: 8080
-debug: True
+debug: False
 oncall_host: http://localhost:8080
 metrics: dummy
 db:
@@ -67,6 +67,8 @@ notifications:
   default_modes:
     - "email"
 
+public_calendar_base_url: 'http://localhost:8080/api/v0/ical'
+
 reminder:
   activated: True
   polling_interval: 360
@@ -77,6 +79,5 @@ user_validator:
   subject: 'Warning: Missing phone number in Oncall'
   body: 'You are scheduled for an on-call shift in the future, but have no phone number recorded. Please update your information in Oncall.'
 
-slack_instance: foobar
 header_color: '#3a3a3a'
 team_managed_message: 'Managed team - this team is managed via API'

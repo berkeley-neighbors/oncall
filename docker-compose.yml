@@ -1,21 +1,36 @@
 version: '3'
 
 services:
-  oncall-web:
+  web:
     build: .
-    hostname: oncall
+    hostname: web
+    depends_on:
+      - mysql
     ports:
       - "8080:8080"
     environment:
-      - DOCKER_DB_BOOTSTRAP=1
+      - HOST=https://example.org
+      - DOCKER_DB_BOOTSTRAP=0
       - IRIS_API_HOST=iris
+      - SYNOLOGY_APP_ID=your_app_id
+      - SYNOLOGY_REDIRECT_URI=your_redirect_uri
+      - SYNOLOGY_OAUTH_URL=your_api_host
+      - SYNOLOGY_SDK_URL=your_sdk_url
+      - ALLOW_ORIGINS_LIST=your_allowed_origins
+      - AUTH_METHOD=debug
+      - SESSION_ENCRYPT_KEY=your_session_encryption_key
+      - SESSION_VALIDATE_KEY=your_session_signing_key
+      - ALLOW_HTTP=1
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_HOST=mysql
+
     volumes:
       - ./configs/config.docker.yaml:/home/oncall/config/config.yaml
     networks:
       - iris
   
-  oncall-mysql:
-    hostname: oncall-mysql
+  mysql:
+    hostname: mysql
     image: mysql:9.4
     environment:
       - MYSQL_ROOT_PASSWORD=1234

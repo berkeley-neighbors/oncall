@@ -11,7 +11,6 @@ from . import auth_manager
 
 allow_no_auth = True
 
-
 def on_post(req, resp):
     login_info = uri.parse_query_string(req.context['body'].decode('utf-8'))
 
